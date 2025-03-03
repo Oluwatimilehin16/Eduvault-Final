@@ -1,0 +1,585 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    background:#fff;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+header {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 35px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height:80px;
+    background-color: #1E3A8A;
+    z-index: 1000;
+}
+.logo img{
+    height:250px; 
+    width:auto;
+    display:block;
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color:#ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #fff;
+}
+nav ul li:hover {
+    border:1px;
+    border-radius: 3px;
+    background:rgba(255, 255, 255, 0.2);
+    padding:5px;
+}
+/*<---heading for dashboard---->*/
+.banner {
+    width: 80%;
+    max-width: 1200px;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    padding: 50px 0;
+}
+
+.banner .detail {
+    position: relative; /* Change from absolute to relative */
+    text-align: center;
+    width: 100%;
+}
+
+.banner .detail h1 {
+    font-size: 3.5rem;
+    color: #1E3A8A;
+    text-transform: capitalize;
+    font-weight: bold;
+    margin-top: 100px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.banner .detail p {
+    font-size: 1.2rem;
+    color: #333;
+    max-width: 800px;
+    margin: 20px auto;
+    line-height: 1.6;
+}
+
+.banner .detail a{
+    text-transform:uppercase;
+    color: #1E3A8A;
+}
+.banner .detail span{
+    color: #fff;
+}
+#header .icons{
+    display: flex;
+}
+#header .icons i{
+   margin-left: 120px;
+   font-size: 1.5rem;
+   cursor: pointer;
+   color: #000;
+}
+#menu-btn{
+    display: none;
+}
+.user-box{
+    position: absolute;
+    top:80%;
+    right:1rem;
+    background:rgba(173,216,230,0.7);
+    box-shadow: var(--box-shadow);
+    border-radius: .5rem;
+    padding:1rem;
+    text-align: center;
+    width:18rem;
+    transform: scale(1.0);
+    transform-origin: top right;
+    line-height: 2;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease,visibility 0.3s ease;
+}
+
+.logout-btn{
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: .3rem;
+}
+ .user-box.active{
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/*---------------------admin dashboard------------------------------*/
+.dashboard{
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 5px;
+    width: 100%; /* Ensures it takes the full width */
+    max-width: 1200px; /* Prevents it from stretching too much */
+    margin: auto; /* Centers it */
+    }
+    
+    .box-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: 1.5rem; /* Space between boxes */
+        padding: 2rem;
+        background-color: #c3cfdb;
+        width:100%;
+        border-radius: 4px;
+    }
+    
+    
+    .box-container .box {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: 1.5rem;
+        padding: 2rem;
+        width: 100%; /* Ensure it takes up full space */
+        max-width: 1000px; /* Prevents it from being too stretched */
+        margin: auto; /* Center the grid */
+        background-color: #fff;
+        border-radius: 5px;
+        height: 200px;
+    }
+    .box-container .box:hover {
+        transform: translateY(-5px);
+    }
+    
+    .dashboard h3{
+        text-align: center;
+        font-size: 2rem;
+    }
+    .dashboard p{
+       font-size: 20px;
+       text-transform: capitalize;
+       margin: .5rem 0;
+    }
+
+
+
+    /* Admin Product Styling Page*/
+    .form-container {
+        background: #fff; /* White background */
+        padding: 30px;
+        border-radius: 10px;
+        width: 60%;
+        margin: auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .input-field {
+        margin-bottom: 20px;
+    }
+    
+    .input-field label {
+        display: block;
+        font-weight: bold;
+        color: #1E3A8A; /* Dark Blue */
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+    
+    .input-field input,
+    .input-field select,
+    .input-field textarea,
+    select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #c3cfdb; /* Light Blue */
+        border-radius: 5px;
+        background: #f9f9f9;
+        color: #1E3A8A;
+        font-size: 14px;
+        transition: 0.3s ease-in-out;
+    }
+    
+    .input-field input:focus,
+    .input-field select:focus,
+    .input-field textarea:focus {
+        border-color: #ffcc00; /* Yellow */
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+    }
+    
+    .btn {
+        background: #1E3A8A;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        text-transform: uppercase;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+    }
+    
+    .btn:hover {
+        background: #ffcc00;
+        color: #1E3A8A;
+    }
+    
+    #preview-container {
+        margin-top: 20px;
+        border: 2px dashed #c3cfdb;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+    }
+    .title{
+        text-align: center;
+    }
+    .title h1{
+        font-size: 3rem;
+    }
+    .message, .empty {
+        margin-bottom: 20px;
+        background: black;
+        display: flex;
+        justify-content: center; /* Centers the text inside */
+        align-items: center; /* Aligns text vertically */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        width: 50%; /* Makes it wide enough */
+        max-width: 600px; /* Prevents it from being too big */
+        text-align: center;
+        text-transform: capitalize;
+        margin: 0 auto; /* Centers it horizontally */
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%); /* Ensures perfect centering */
+    }
+    .message i{
+        cursor: pointer;
+    }
+    
+    .empty{
+        top:65%;
+    }
+    .show-products {
+        width: 100%;
+        min-height: 100vh; /* Ensures full height */
+        display: flex;
+        justify-content: center; /* Centers the box container */
+        align-items: center; /* Centers vertically */
+        padding: 20px 0; /* Adds some top and bottom spacing */
+    }
+    
+    .box-container1 {
+        width: 80%; /* Ensures space on the sides */
+        max-width: 1200px; /* Prevents it from stretching too wide */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    
+    .box1 {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .box1:hover {
+        transform: scale(1.05);
+    }
+    
+    .box-container1 .box1 .cover-image {
+        width: 100%;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
+    
+    .box1 h3 {
+        margin: 10px 0;
+        font-size: 18px;
+    }
+    
+    .price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #1E3A8A;
+    }
+    
+    .edit, .delete {
+        display: inline-block;
+        margin: 10px 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    
+    .delete, .edit {
+        background: #c3cfdb; /* Light Blue */
+        color: #1E3A8A;
+    }
+    .delete:hover, .edit:hover{
+        background:#ffcc00;
+        color:#1E3A8A;
+    }
+    
+    .empty {
+        text-align: center;
+        font-size: 16px;
+        color: gray;
+    }
+    /* Center the form in the middle of the page */
+.update-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4; /* Light background */
+}
+
+/* Styling the form */
+.update-container form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Image Styling */
+.update-container img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Input Fields */
+.update-container input,
+.update-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* File Input */
+.update-container input[type="file"] {
+    border: none;
+}
+
+/* Buttons */
+.update-container .edit {
+    background: #1E3A8A; /* Dark Blue */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.update-container .option-btn {
+    background: #ffcc00; /* Yellow */
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover Effects */
+.update-container .edit:hover {
+    background: #142c66; /* Darker Blue */
+}
+
+.update-container .option-btn:hover {
+    background: #e6b800; /* Darker Yellow */
+}
+
+
+
+
+/* Message section styling */
+
+/* Message Container */
+.message-container {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Title */
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1E3A8A; /* Dark Blue */
+    margin-bottom: 20px;
+    margin-top: -32px;
+}
+
+/* Box Container */
+.box-message {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Message Box */
+.box-m1{
+    background: #fff; /* White */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    min-width: 350px;
+    transition: 0.3s;
+    border: 2px solid #1E3A8A; /* Dark Blue */
+    text-align: center;
+    min-height:180px;
+}
+
+/* Text Styling */
+.box-m1 p{
+    font-size: 14px;
+    color: #1E3A8A; /* Dark Blue */
+    font-weight: bold;
+    line-height: 20px;
+}
+
+.box-m1 p span {
+    color: #c3cfdb; /* Light Blue */
+}
+
+.order-container {
+    padding: 20px;
+}
+.order-container .box-message .box-m1{
+    text-align:left;
+    padding:10px 20px;
+}
+
+.order-container .box-m1 p{
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    color: hotpink;
+}
+
+.order-container .box-m1 span{
+    color:#555;
+    margin-left: 8px;
+}
+.order-container form{
+    text-align: center;
+}
+.order-container form select{
+    width:100%;
+    cursor:pointer;
+}
+.order-container form input{
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive Design */
+/* 📱 Small Screens (Phones, up to 600px) */
+@media (max-width: 600px) {
+    nav ul {
+        display: none; /* Hide menu initially */
+        flex-direction: column;
+        background: #1E3A8A;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    nav ul.show {
+        display: flex; /* Show menu when active */
+        flex-direction: column;
+    }
+
+    .menu-btn {
+        display: block;
+        font-size: 28px;
+        cursor: pointer;
+        color: #ffcc00;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}
+
+/* 📲 Medium Screens (Tablets, 601px - 1024px) */
+@media (max-width: 1024px) {
+    .menu-btn {
+        display: none;
+    }
+
+    nav ul {
+        display: flex; /* Keep menu visible */
+    }
+}

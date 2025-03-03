@@ -1,0 +1,459 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    background:#fff;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+header {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 35px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height:80px;
+    background-color: #1E3A8A;
+    z-index: 1000;
+}
+.logo img{
+    height:250px; 
+    width:auto;
+    display:block;
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color:#ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #fff;
+}
+nav ul li:hover {
+    border:1px;
+    border-radius: 3px;
+    background:rgba(255, 255, 255, 0.2);
+    padding:5px;
+}
+/*<---heading for dashboard---->*/
+.banner {
+    width: 80%;
+    max-width: 1200px;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    padding: 50px 0;
+}
+
+.banner .detail {
+    position: relative; /* Change from absolute to relative */
+    text-align: center;
+    width: 100%;
+}
+
+.banner .detail h1 {
+    font-size: 3.5rem;
+    color: #1E3A8A;
+    text-transform: capitalize;
+    font-weight: bold;
+    margin-top: 100px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.banner .detail p {
+    font-size: 1.2rem;
+    color: #333;
+    max-width: 800px;
+    margin: 20px auto;
+    line-height: 1.6;
+}
+
+.banner .detail a{
+    text-transform:uppercase;
+    color: #1E3A8A;
+}
+.banner .detail span{
+    color: #fff;
+}
+#header .icons{
+    display: flex;
+}
+#header .icons i{
+   margin-left: 120px;
+   font-size: 1.5rem;
+   cursor: pointer;
+   color: #000;
+}
+#menu-btn{
+    display: none;
+}
+.user-box{
+    position: absolute;
+    top:80%;
+    right:1rem;
+    background:rgba(173,216,230,0.7);
+    box-shadow: var(--box-shadow);
+    border-radius: .5rem;
+    padding:1rem;
+    text-align: center;
+    width:18rem;
+    transform: scale(1.0);
+    transform-origin: top right;
+    line-height: 2;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease,visibility 0.3s ease;
+}
+
+.logout-btn{
+    background: #000;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: .3rem;
+}
+ .user-box.active{
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1.5rem; /* Space between boxes */
+    padding: 2rem;
+    background-color: #c3cfdb;
+    width:100%;
+    border-radius: 4px;
+}
+
+
+.box-container .box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1.5rem;
+    padding: 2rem;
+    width: 100%; /* Ensure it takes up full space */
+    max-width: 1000px; /* Prevents it from being too stretched */
+    margin: auto; /* Center the grid */
+    background-color: #fff;
+    border-radius: 5px;
+    height: 200px;
+}
+.box-container .box:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard h3{
+    text-align: center;
+    font-size: 2rem;
+}
+.dashboard p{
+   font-size: 20px;
+   text-transform: capitalize;
+   margin: .5rem 0;
+}
+
+
+/* THIS IS FOR THE EDUCATOR UPLOAD PAGE STYLING */
+.form-container {
+    background: #fff; /* White background */
+    padding: 30px;
+    border-radius: 10px;
+    width: 60%;
+    margin: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.input-field {
+    margin-bottom: 20px;
+}
+
+.input-field label {
+    display: block;
+    font-weight: bold;
+    color: #1E3A8A; /* Dark Blue */
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.input-field input,
+.input-field select,
+.input-field textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #c3cfdb; /* Light Blue */
+    border-radius: 5px;
+    background: #f9f9f9;
+    color: #1E3A8A;
+    font-size: 14px;
+    transition: 0.3s ease-in-out;
+}
+
+.input-field input:focus,
+.input-field select:focus,
+.input-field textarea:focus {
+    border-color: #ffcc00; /* Yellow */
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+}
+
+.btn {
+    background: #1E3A8A;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background: #ffcc00;
+    color: #1E3A8A;
+}
+
+#preview-container {
+    margin-top: 20px;
+    border: 2px dashed #c3cfdb;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+.title{
+    text-align: center;
+}
+.title h1{
+    font-size: 3rem;
+}
+.message, .empty {
+    margin-bottom: 20px;
+    background: black;
+    display: flex;
+    justify-content: center; /* Centers the text inside */
+    align-items: center; /* Aligns text vertically */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 50%; /* Makes it wide enough */
+    max-width: 600px; /* Prevents it from being too big */
+    text-align: center;
+    text-transform: capitalize;
+    margin: 0 auto; /* Centers it horizontally */
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%); /* Ensures perfect centering */
+}
+.message i{
+    cursor: pointer;
+}
+
+.empty{
+    top:55%;
+}
+#cont-text{
+        color: #1E3A8A;
+        padding-top: 70px;
+        text-align: center; /* Centers the text */
+        text-transform: uppercase; /* Converts text to uppercase */
+        font-weight: bold; /* Makes it bold (optional) */
+    
+}
+.show-products {
+    width: 100%;
+    min-height: auto;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px 0; 
+}
+
+.box-container1 {
+    width: 80%; /* Ensures space on the sides */
+    max-width: 1200px; /* Prevents it from stretching too wide */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    align-items: start;
+    border-radius: 10px;
+}
+
+.box1 {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+    min-height: 350px;
+}
+
+.box1:hover {
+    transform: scale(1.05);
+}
+
+.box-container1 .box1 .cover-image {
+    width: 100%;
+    min-height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+.box1 h3 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1E3A8A;
+}
+
+.edit, .delete {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+.delete, .edit {
+    background: #c3cfdb; /* Light Blue */
+    color: #1E3A8A;
+}
+.delete:hover, .edit:hover{
+    background:#ffcc00;
+    color:#1E3A8A;
+}
+#upload-text{
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+
+.edit-book-form {
+    width: 50%;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+}
+
+.edit-book-form h2 {
+    text-align: center;
+    color: #1E3A8A;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.input-field {
+    margin-bottom: 15px;
+}
+
+.input-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-field input,
+.input-field textarea,
+.input-field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.input-field textarea {
+    resize: none;
+}
+
+.cover-preview {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 2px solid #1E3A8A;
+}
+
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #1E3A8A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.btn:hover {
+    background: #153275;
+}
+
+.cancel-btn {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: red;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.cancel-btn:hover {
+    text-decoration: underline;
+}
+
+

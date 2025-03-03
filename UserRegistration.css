@@ -1,0 +1,200 @@
+/* Reset Default Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page Background */
+body {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    background: url('assets/User.png') no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 35px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height:80px;
+}
+
+/* Logo */
+.logo img {
+    height:250px; 
+    width:auto;
+    display:block;
+}
+
+/*Navigation Menu */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color:#fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffcc00;
+}
+nav ul li:hover {
+    border:1px;
+    border-radius: 3px;
+    background:rgba(255, 255, 255, 0.2);
+    padding:5px;
+}
+
+/* Registration Form Container */
+.register-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 80px;
+}
+.message {
+    position: absolute;
+    top: 68px;
+    left: 56.5%;
+    transform: translateX(-50%);
+    width: 50%;
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    color: #FF0000;    
+    text-align: center;
+    text-transform: capitalize;
+    z-index:1000;
+    font-weight: 700;
+}
+
+.login-form {
+    background: rgba(255, 255, 255, 0.2); /* Transparent background */
+    padding: 30px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    width: 450px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+    height:auto;
+    position: fixed;
+    
+}
+
+/* Form Heading */
+.login-form h2 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+/* Input Fields */
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input::placeholder{
+    color: #1a1a1a;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.checkbox a{
+ text-decoration: none;
+ color: #ffcc00;
+}
+
+
+/* Register Button */
+.register-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #1E3A8A;
+    color: white;
+    font-size: 16px;
+    margin-top:15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background: #153473;
+}
+
+/*Terms & Conditions */
+.input-group a {
+    color: #1E3A8A;
+    text-decoration: none;
+}
+
+.input-group a:hover {
+    text-decoration: underline;
+}
+
+/*Footer */
+footer {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    padding: 6px 20px;
+    font-size: 12px;
+    width: 100%;
+}
+
+/* Centering Footer Content */
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/*Responsive Design */
+@media (max-width: 768px) {
+    .register-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    nav ul li {
+        margin: 0 8px;
+    }
+
+    nav ul li a {
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+header {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 35px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height:80px;
+    position: absolute; /* Ensures it's above carousel */
+    z-index: 1000; 
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Logo */
+
+.logo img{
+    height:250px; 
+    width:auto;
+    display:block;
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color:#fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffcc00;
+}
+nav ul li:hover {
+    border:1px;
+    border-radius: 3px;
+    background:rgba(255, 255, 255, 0.2);
+    padding:5px;
+}
+
+
+/* Ensure Carousel Images Cover the Screen */
+.carousel-item img {
+    height: 100vh; /* Full-screen height */
+    object-fit: cover;
+}
+/* Overlay - Covers Entire Image */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Dark transparent overlay */
+    z-index: 1;
+}
+
+
+/* Hero Content - Always Centered */
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect centering */
+    text-align: center;
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 2; /* Ensures text stays above overlay */
+    width: 80%;
+    max-width: 800px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Remove Bootstrap’s Default Sliding Effect on Text */
+.carousel-caption {
+    position: static;
+    transform: none;
+    left: auto;
+    right: auto;
+}
+
+/* Hero Title */
+.hero-title {
+    font-size: 4rem; /* Bigger title */
+    font-weight: 700; /* Extra bold */
+    font-family: 'Poppins', sans-serif; /* Modern professional font */
+    color: #ffffff;
+    text-transform: uppercase; /* Makes text stand out */
+    margin-bottom: 10px;
+    text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8);
+}
+
+/* Sub-Hero Text */
+.sub-hero {
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    color: #f8f9fa;
+    margin-bottom: 20px;
+}
+
+/* CTA Button */
+.hero-content .btn {
+    font-size: 1.2rem;
+    padding: 12px 25px;
+    background: #ffcc00;
+    color: #1E3A8A;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.hero-content .btn:hover {
+    background: #ffd633;
+    color: #153473;
+}
+/* General Button Styling */
+.buy-btn, .login-btn, .download-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+/* Buy Now Button */
+.buy-btn {
+    background-color: #1E3A8A; /* Dark Blue */
+    color: #fff;
+}
+
+.buy-btn:hover {
+    background-color: #ffcc00; /* Yellow */
+    color: #1E3A8A;
+    transform: scale(1.05);
+}
+
+/* Login to Buy Button */
+.login-btn {
+    background-color: #c3cfdb; /* Light Blue */
+    color: #1E3A8A;
+}
+
+.login-btn:hover {
+    background-color: #1E3A8A;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Download Button */
+.download-btn {
+    background-color: #ffcc00; /* Yellow */
+    color: #1E3A8A;
+}
+
+.download-btn:hover {
+    background-color: #1E3A8A;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+
+/* Ensure It Looks Good on Mobile */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    .sub-hero {
+        font-size: 1rem;
+    }
+    .hero-content {
+        width: 90%;
+    }
+}
