@@ -19,7 +19,7 @@ if (!file_exists($file_path)) {
     die("File not found!");
 }
 
-// Force inline viewing and block download
+// Secure PDF delivery
 header("Content-Type: application/pdf");
 header("Content-Disposition: inline; filename=\"$file\"");
 header("Content-Length: " . filesize($file_path));
@@ -27,7 +27,5 @@ header("X-Content-Type-Options: nosniff");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 header("Expires: 0");
-header("Content-Security-Policy: default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self';");
-
 readfile($file_path);
 exit();

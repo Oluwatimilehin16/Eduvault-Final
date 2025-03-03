@@ -2,70 +2,68 @@
 include 'connection.php';
 session_start();
 
-// Ensure the user is logged in
 if (!isset($_SESSION['student_id'])) {
     die("Unauthorized access!");
 }
 
-// Validate the file
-if (!isset($_GET['file'])) {
+// Validate book ID from URL
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Invalid request!");
 }
 
-$file = basename($_GET['file']); // Prevent directory traversal
-$file_path = "uploads/" . $file;
+$book_id = intval($_GET['id']);
 
-// Check if the file exists
-if (!file_exists($file_path)) {
-    die("File not found!");
+// Fetch book details based on the correct ID
+$sql = "SELECT title, file_path FROM products WHERE id = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("SQL Error: " . $conn->error);
 }
 
+$stmt->bind_param("i", $book_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$book = $result->fetch_assoc();
+
+if (!$book) {
+    die("Book not found!");
+}
+
+// Ensure correct file path is used
+$title = htmlspecialchars($book['title']);
+$file_path = "uploads/" . basename($book['file_path']); // Ensure no directory issues
+
+// Debugging: Log the book details (optional, remove in production)
+error_log("Book ID: $book_id | Title: $title | File Path: $file_path");
+
+if (!file_exists($file_path)) {
+
+    die("File not found: " . $file_path);
+
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Book Viewer</title>
+    <title><?php echo $title; ?> - Secure Book Viewer</title>
     <link rel="stylesheet" href="view_book.css">
-    <script>
-        document.addEventListener("contextmenu", function(event) {
-            event.preventDefault(); // Disable right-click
-        });
-
-        document.addEventListener("keydown", function(event) {
-            if (event.ctrlKey && (event.key === "s" || event.key === "u" || event.key === "p" || event.key === "c")) {
-                event.preventDefault(); // Block Save, View Source, Print, Copy
-            }
-            if (event.key === "F12") {
-                event.preventDefault(); // Block Developer Tools
-            }
-        });
-
-        function blockScreenshots() {
-            const video = document.createElement("video");
-            video.autoplay = true;
-            video.playsInline = true;
-            video.style.position = "absolute";
-            video.style.top = "0";
-            video.style.left = "0";
-            video.style.width = "1px";
-            video.style.height = "1px";
-            document.body.appendChild(video);
-        }
-
-        window.onload = blockScreenshots;
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 <body>
     <div class="viewer-container">
-        <div class="toolbar">
-            <input type="text" id="searchText" placeholder="Search text...">
-            <button onclick="searchInPDF()">Search</button>
+        <h2 class="book-title"><?php echo $title; ?></h2>
+        <canvas id="pdfCanvas" data-url="<?php echo $file_path . '?t=' . time(); ?>"></canvas>
+        <div class="pagination">
+            <button id="prevPage">Previous</button>
+            <span>Page <span id="pageNum">1</span> of <span id="pageCount">?</span></span>
+            <button id="nextPage">Next</button>
         </div>
-        <iframe id="pdfViewer" src="secure_reader.php?file=<?php echo urlencode($file); ?>" style="overflow-y: scroll;"></iframe>
-        <div class="watermark">EduVault - Student ID: <?php echo $_SESSION['student_id']; ?></div>
+        <div id="watermark" class="watermark">EduVault - Student ID: <?php echo $_SESSION['student_id']; ?></div>
     </div>
-    <script src="search.js"></script>
+    <script src="js/view_book.js"></script>
 </body>
 </html>

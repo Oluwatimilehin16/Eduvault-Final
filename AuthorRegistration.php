@@ -3,7 +3,7 @@ require_once('connection.php');
 session_start();
 
 if(isset($_POST["submit"])) {
-    
+
     $firstname = htmlspecialchars($_POST["firstname"]);
     $lastname  = htmlspecialchars($_POST["lastname"]);
     $email     = htmlspecialchars($_POST["email"]);
@@ -19,9 +19,15 @@ if(isset($_POST["submit"])) {
         if ($_POST['password'] !== $_POST['cpassword']) {
             $message[] = 'Passwords do not match!';
         } else {
-            $sql = "INSERT INTO user (firstname, lastname, email, password, user_type) VALUES (?,?,?,?,?)";
-            $stmtinsert = $conn->prepare($sql);
-            $result = $stmtinsert->execute([$firstname, $lastname, $email, $password, $user_type]);
+            // $sql = "INSERT INTO user (firstname, lastname, email, password, user_type) VALUES (?,?,?,?,?)";
+            // $stmtinsert = $conn->prepare($sql);
+            // $result = $stmtinsert->execute([$firstname, $lastname, $email, $password, $user_type]);
+
+                $sql = "INSERT INTO user (firstname, lastname, email, password, user_type) VALUES (?,?,?,?,?)";
+                $stmtinsert = $conn->prepare($sql);
+                $stmtinsert->bind_param("sssss", $firstname, $lastname, $email, $password, $user_type);
+                $result = $stmtinsert->execute();
+
 
             if ($result) {
                 $message[] = 'Registration successful! Redirecting...';
@@ -61,7 +67,7 @@ if(isset($_POST["submit"])) {
 
 <?php
 if (isset($message)) {
-    foreach ($message as $msg) { 
+    foreach ($message as $msg) {
         echo '<div class="message"><span>' . $msg . '</span></div>';
     }
 }
