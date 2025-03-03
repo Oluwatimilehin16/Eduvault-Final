@@ -62,8 +62,13 @@ if (!file_exists($file_path)) {
             <span>Page <span id="pageNum">1</span> of <span id="pageCount">?</span></span>
             <button id="nextPage">Next</button>
         </div>
-        <div id="watermark" class="watermark">EduVault - Student ID: <?php echo $_SESSION['student_id']; ?></div>
+
+        <div id="watermark" style="display: None;">EduVault - Student ID: <?php echo $_SESSION['student_id']; ?></div>
+        <div class="pdf-watermark" >EduVault - Student ID: <?php echo $_SESSION['student_id']; ?></div>
     </div>
+
+
+
     <script src="js/view_book.js"></script>
 </body>
 </html>

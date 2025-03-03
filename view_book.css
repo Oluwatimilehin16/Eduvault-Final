@@ -20,13 +20,16 @@ body {
 
 }
 
-/* Watermark to Identify Users */
-.viewer-container .watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
+.viewer-container .pdf-watermark{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(100, 10, 10, 0.3);
+    pointer-events: none;
+    white-space: nowrap;
 }
 
 /* Responsive Canvas */
@@ -37,6 +40,8 @@ canvas {
     border-radius: 5px;
     background: #fff;
 }
+
+
 
 /* Pagination Controls */
 .pagination {
@@ -67,4 +72,18 @@ canvas {
 .pagination span {
     font-size: 16px;
     font-weight: bold;
+}
+
+
+
+.pdf-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+#pdfCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
 }

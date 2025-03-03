@@ -1,10 +1,5 @@
-const url =
-    document.getElementById("pdfCanvas").getAttribute("data-url") +
-    "?t=" +
-    new Date().getTime();
-
+const url = document.getElementById("pdfCanvas").getAttribute("data-url");
 const studentId = document.getElementById("watermark").textContent;
-
 let pdfDoc = null,
     pageNum = 1,
     pageRendering = false,
@@ -17,7 +12,7 @@ function renderPage(num) {
     pageRendering = true;
 
     pdfDoc.getPage(num).then((page) => {
-        const viewport = page.getViewport({ scale });
+        const viewport = page.getViewport({ scale: 4 });
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
@@ -25,9 +20,10 @@ function renderPage(num) {
             canvasContext: ctx,
             viewport: viewport,
         };
-        const renderTask = page.render(renderContext);
 
+        const renderTask = page.render(renderContext);
         renderTask.promise.then(() => {
+          //  addWatermark(); // Add watermark after rendering
             pageRendering = false;
             if (pageNumPending !== null) {
                 renderPage(pageNumPending);
@@ -62,13 +58,18 @@ function onNextPage() {
 document.getElementById("prevPage").addEventListener("click", onPrevPage);
 document.getElementById("nextPage").addEventListener("click", onNextPage);
 
-function clearCanvas() {
-    let canvas = document.getElementById("pdfCanvas");
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function addWatermark() {
+    // ctx.save();
+    // ctx.font = "20px Arial";
+    // ctx.fillStyle = "rgba(255, 0, 0, 0.3)"; // Light red
+    // ctx.textAlign = "center";
+    // ctx.textBaseline = "middle";
+    // ctx.translate(canvas.width / 2, canvas.height / 2);
+    // ctx.rotate(-Math.PI / 6); // Rotate for diagonal effect
+    // ctx.fillText(studentId, 0, 0);
+    // ctx.restore();
 }
 
-clearCanvas();
 pdfjsLib.getDocument(url).promise.then((pdf) => {
     pdfDoc = pdf;
     document.getElementById("pageCount").textContent = pdf.numPages;
@@ -91,6 +92,4 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-document.addEventListener("dragstart", (event) => event.preventDefault());
-
-
+document.addEventListener( "dragstart", ( event ) => event.preventDefault() );
