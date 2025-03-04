@@ -15,7 +15,7 @@ if (!isset($_SESSION['student_id'])) {
 
 $student_id = $_SESSION['student_id'];
 $student_email = $_SESSION['student_email'];
-$student_firstname = $_SESSION['student_firstname'];
+$student_name = $_SESSION['student_firstname'];
 
 
 // Check if a product ID is provided
