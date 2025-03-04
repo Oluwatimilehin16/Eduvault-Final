@@ -33,7 +33,7 @@
         <p>Username: <span><?php echo isset($_SESSION['educator_name']) ? $_SESSION['educator_name'] : 'Guest'; ?></span></p>
         <p>Email: <span><?php echo isset($_SESSION['educator_email']) ? $_SESSION['educator_email'] : 'Not available'; ?></span></p>
 
-        <form method="post" action="logout.php">
+        <form method="post" action="login.php">
             <button type="submit" class="logout-btn">Log Out</button>
         </form>
     </div>

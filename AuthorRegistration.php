@@ -30,8 +30,12 @@ if(isset($_POST["submit"])) {
 
 
             if ($result) {
+                $_SESSION['educator_id'] = $conn->insert_id; // Get the new user's ID
+                $_SESSION['educator_email'] = $email;
+                $_SESSION['educator_name'] = $firstname . ' ' . $lastname;
+                
                 $message[] = 'Registration successful! Redirecting...';
-                header("refresh:2;url=homepage.php"); // Redirect after 2 seconds
+                header("refresh:2;url=educator_product.php"); // Redirect after 2 seconds
             } else {
                 $message[] = 'Something went wrong. Try again!';
             }
