@@ -1,11 +1,11 @@
 <?php
-
+include 'connection.php';
+session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Cross-Origin-Resource-Policy: cross-origin");
-include 'connection.php';
-session_start();
+
 
 // Ensure the student is logged in
 if (!isset($_SESSION['student_id'])) {
@@ -14,12 +14,21 @@ if (!isset($_SESSION['student_id'])) {
 }
 
 $student_id = $_SESSION['student_id'];
-$student_email = $_SESSION['student_email']; // Ensure student email is stored in session
+$student_email = $_SESSION['student_email'];
+$student_firstname = $_SESSION['student_firstname'];
+
 
 // Check if a product ID is provided
 if (!isset($_GET['id'])) {
     header('location:homepage.php');
     exit();
+}
+if(isset($_POST['logout'])){
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+    
 }
 
 $product_id = $_GET['id'];
@@ -94,6 +103,7 @@ $paystack_public_key = "pk_test_4729b3310d94eb3bfce9c491f7f685b9ebe12d22";
         handler.openIframe();
     }
 </script>
+<script src="script.js"></script>
 
 </body>
 </html>

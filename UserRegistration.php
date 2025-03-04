@@ -7,7 +7,7 @@ if(isset($_POST['submit'])){
     $lastname  = htmlspecialchars($_POST["lastname"]);
     $email     = htmlspecialchars($_POST["email"]);
     $password  = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $user_type = "educator";
+    $user_type = "student";
 
     $select_user=mysqli_query($conn, "SELECT * FROM `user` WHERE email='$email'") or die();
 
@@ -20,7 +20,7 @@ if(isset($_POST['submit'])){
                 mysqli_query($conn, "INSERT INTO `user`(`firstname`,`lastname`, `email`, `password`) 
                 VALUES ('$firsname','$lastname', '$email', '$password')") or die ('query failed');
            $message[]= 'registered successfully';
-           header('location: homepage.php');
+           header("refresh:2;url=homepage.php");
         }
         }
 

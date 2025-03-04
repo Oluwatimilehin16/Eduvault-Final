@@ -23,7 +23,7 @@ $student_id = $_SESSION['student_id'] ?? null;
 <body>
     <header>
         <div class="logo">
-        <a href="homepage.html"><img src="./assets/logo.png" alt="EduVault"></a>
+        <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
         </div>
         <!-- Search Bar -->
         <div class="search-container">
@@ -33,7 +33,7 @@ $student_id = $_SESSION['student_id'] ?? null;
         <div class="nav">
         <nav>
             <ul>
-                <li><a href="homepage.html">Home</a></li>
+                <li><a href="homepage.php">Home</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Courses</a></li>
                 <li><a href="#">Contact</a></li>
@@ -147,19 +147,19 @@ $student_id = $_SESSION['student_id'] ?? null;
 <div class="testimonial-section">
     <div class="testimonial">
         <p>"EduVault has made learning so much easier! The DRM protection ensures high-quality content."</p>
-        <h4>- Jane Doe</h4>
+        <h4>-Timothy James</h4>
     </div>
     <div class="testimonial">
         <p>"As an educator, I love how I can upload courses and earn without worrying about piracy."</p>
         <h4>- Mr. Johnson</h4>
     </div>
     <div class="testimonial">
-        <p>"As an educator, I love how I can upload courses and earn without worrying about piracy."</p>
-        <h4>- Mr. Johnson</h4>
+    <p>"EduVault has truly transformed my learning experience. The DRM protection gives me peace of mind."</p>
+    <h4>- Peace</h4>
     </div>
     <div class="testimonial">
-        <p>"As an educator, I love how I can upload courses and earn without worrying about piracy."</p>
-        <h4>- Mr. Johnson</h4>
+    <p>"I love how easy it is to access my courses anytime, anywhere, without worrying about content theft."</p>
+    <h4>- Nifemi</h4>
     </div>
 </div>
 
@@ -178,7 +178,7 @@ $student_id = $_SESSION['student_id'] ?? null;
 <div class="cta-section">
     <h2>Become an Educator</h2>
     <p>Upload your courses & start earning today.</p>
-    <a href="AuthorsRegistration.php" class="cta-btn">Get Started</a>
+    <a href="AuthorRegistration.php" class="cta-btn">Get Started</a>
 </div>
 
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educator Dashboard</title>
+    <title>Student Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="educator.css"> <!-- Link to educator-specific CSS -->
 </head>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="user-box">
-        <p>Username: <span><?php echo isset($_SESSION['student_name']) ? $_SESSION['student_name'] : 'Guest'; ?></span></p>
+        <p>Username: <span><?php echo isset($_SESSION['student_firstname']) ? $_SESSION['student_firstname'] : 'Guest'; ?></span></p>
         <p>Email: <span><?php echo isset($_SESSION['student_email']) ? $_SESSION['student_email'] : 'Not available'; ?></span></p>
 
         <form method="post" action="logout.php">
