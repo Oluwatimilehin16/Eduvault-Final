@@ -1,6 +1,6 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', '', 'eduvault', 4306) or die('connection failed');
+$conn = mysqli_connect('localhost', 'root', '', 'eduvault', 3306) or die('connection failed');
 
 ?>
 

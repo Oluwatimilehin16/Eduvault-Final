@@ -4,7 +4,7 @@ let pdfDoc = null,
     pageNum = 1,
     pageRendering = false,
     pageNumPending = null,
-    scale = 1.2,
+    scale = 2,
     canvas = document.getElementById("pdfCanvas"),
     ctx = canvas.getContext("2d");
 
@@ -12,7 +12,7 @@ function renderPage(num) {
     pageRendering = true;
 
     pdfDoc.getPage(num).then((page) => {
-        const viewport = page.getViewport({ scale: 4 });
+        const viewport = page.getViewport({ scale: 2 });
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
