@@ -1,7 +1,8 @@
 <?php
 include 'connection.php';
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $student_id = $_SESSION['student_id'] ?? null;
 
 // if (!isset($_SESSION['student_id'])) {
@@ -34,9 +35,9 @@ $student_id = $_SESSION['student_id'] ?? null;
         <nav>
             <ul>
                 <li><a href="homepage.php">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="course.php">Courses</a></li>
+                <li><a href="library.php">Library</a></li>
             </ul>
         </nav>
     </div>
@@ -73,9 +74,9 @@ $student_id = $_SESSION['student_id'] ?? null;
                 <img src="./assets/Slide 3.png" class="d-block w-100" alt="Slide 3">
                 <div class="overlay"></div>
                 <div class="hero-content">
-                    <h1 class="hero-title">Join Our Learning Community</h1>
-                    <p class="sub-hero">Connect with experts and expand your knowledge effortlessly.</p>
-                    <a href="UserRegistration.php" class="btn btn-primary btn-lg">Join Now</a>
+                    <h1 class="hero-title">Become an Educator</h1>
+                    <p class="sub-hero">Upload your courses & start earning today.</p>
+                    <a href="AuthorRegistration.php" class="btn btn-primary btn-lg">Join Now</a>
                 </div>
             </div>
         </div>
@@ -125,14 +126,15 @@ $student_id = $_SESSION['student_id'] ?? null;
                     <p class="price">₦<?php echo number_format($product['price'], 2); ?></p>
 
                     <?php if ($student_id): ?>
-                        <?php if ($has_purchased): ?>
-                            <a href="<?php echo $product['file_path']; ?>" download class="download-btn">Download</a>
-                        <?php else: ?>
-                            <a href="checkout.php?id=<?php echo $product['id']; ?>" class="buy-btn">Buy Now</a>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <a href="login.php" class="login-btn">Login to Buy</a>
-                    <?php endif; ?>
+                     <?php if ($has_purchased): ?>
+                     <a href="library.php" class="library-btn">Go to Library</a>
+                <?php else: ?>
+                 <a href="checkout.php?id=<?php echo $product['id']; ?>" class="buy-btn">Buy Now</a>
+                <?php endif; ?>
+                <?php else: ?>
+                <a href="login.php" class="login-btn">Login to Buy</a>
+                <?php endif; ?>
+
                 </div>
         <?php
             }
@@ -175,12 +177,38 @@ $student_id = $_SESSION['student_id'] ?? null;
     </div>
 </div>
 
-<div class="cta-section">
-    <h2>Become an Educator</h2>
-    <p>Upload your courses & start earning today.</p>
-    <a href="AuthorRegistration.php" class="cta-btn">Get Started</a>
-</div>
-
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <footer>
+    <div class="footer-container">
+        <div class="footer-section about">
+            <h2>About EduVault</h2>
+            <p>EduVault is your go-to platform for high-quality DRM-protected educational resources. Learn, explore, and grow with confidence.</p>
+        </div>
+
+        <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="homepage.php">Home</a></li>
+                <li><a href="course.php">Courses</a></li>
+                <li><a href="about.php">About Us</a></li>
+                <li><a href="contact.php">Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section contact">
+            <h2>Contact Us</h2>
+            <p><i class="bi bi-envelope"></i> support@eduvault.com</p>
+            <p><i class="bi bi-telephone"></i> +234 803 447 4877</p>
+            <p><i class="bi bi-geo-alt"></i> Lagos, Nigeria</p>
+        </div>
+    </div>
+    <div class="footer-teach">
+        Want to share knowledge? <a href="AuthorRegistration.php">Sign up as an Educator</a>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 EduVault. All Rights Reserved.</p>
+    </div>
+</footer>
+
 </body>
 </html>

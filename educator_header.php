@@ -17,10 +17,10 @@
 
     <nav class="navbar">
         <ul>
-            <li><a href="educator_dashboard.php">Home</a></li>
+            <li><a href="homepage.php">Home</a></li>
             <li><a href="educator_product.php">My Uploads</a></li>
             <li><a href="educator_orders.php">Sales</a></li>
-            <li><a href="educator_message.php">Messages</a></li>
+            <li><a href="educator_dashboard.php">Dashboard</a></li>
         </ul>
     </nav>
 

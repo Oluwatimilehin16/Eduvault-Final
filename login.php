@@ -1,7 +1,8 @@
 <?php
 include 'connection.php';
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
@@ -24,7 +25,6 @@ if (isset($_POST['submit'])) {
                 header('location:admin_pannel.php');
                 exit();
             } elseif ($row['user_type'] == 'educator') {
-                session_start();
                 $_SESSION['educator_id'] = $row['id'];  // Ensure this comes from the database
                 $_SESSION['educator_name'] = $row['firstname'];
                 $_SESSION['educator_email'] = $row['email'];
@@ -63,10 +63,10 @@ if (isset($_POST['submit'])) {
         <div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Contact</a></li>
+            <li><a href="homepage.php">Home</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="course.php">Courses</a></li>
+                <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
     </div>

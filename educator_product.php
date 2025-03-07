@@ -1,6 +1,8 @@
 <?php
 include 'connection.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Ensure only educators can access this page
 if (!isset($_SESSION['educator_id'])) {
@@ -171,7 +173,7 @@ if (isset($_POST['update_book'])) {
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="input-field">
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" maxlength="60" required>
             </div>
 
             <div class="input-field">
@@ -296,7 +298,7 @@ if (isset($_POST['update_book'])) {
 
             <div class="input-field">
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title" value="<?php echo $edit_data['title']; ?>" required>
+                <input type="text" id="title" name="title" value="<?php echo $edit_data['title']; ?>"required>
             </div>
 
             <div class="input-field">

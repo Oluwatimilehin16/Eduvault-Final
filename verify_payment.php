@@ -1,12 +1,15 @@
 <?php
 include 'connection.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Ensure the required parameters are received
 if (!isset($_GET['reference']) || !isset($_GET['student_id']) || !isset($_GET['product_id'])) {
     die("Invalid request.");
 }
 
+$status= $_GET['paid'];
 $reference = $_GET['reference'];
 $student_id = $_GET['student_id'];
 $product_id = $_GET['product_id'];
@@ -44,19 +47,19 @@ if ($payment_data['status'] && $payment_data['data']['status'] == 'success') {
     }
 
     // Insert the purchase into the database
-    $insert_purchase = mysqli_query($conn, "INSERT INTO purchases (student_id, product_id, amount, transaction_ref) 
-        VALUES ('$student_id', '$product_id', '$amount_paid', '$reference')") or die('Purchase failed');
+    $insert_purchase = mysqli_query($conn, "INSERT INTO purchases (student_id, product_id, amount, transaction_ref, status) 
+        VALUES ('$student_id', '$product_id', '$amount_paid', '$reference', 'pending')") or die('Purchase failed');
 
-    if ($insert_purchase) {
-        echo "<script>alert('Payment successful!'); window.location='library.php';</script>";
-        exit();
-    } else {
-        echo "<script>alert('Database update failed! Contact support.'); window.location='homepage.php';</script>";
-        exit();
-    }
+$update_purchase = mysqli_query($conn, "UPDATE purchases 
+SET status='paid', transaction_ref='$reference' 
+WHERE student_id='$student_id' AND product_id='$product_id' AND status='pending'");
+
+if ($update_purchase) {
+echo "<script>alert('Payment successful!'); window.location='library.php';</script>";
+exit();
 } else {
-    // Payment failed
-    echo "<script>alert('Payment verification failed. Try again.'); window.location='checkout.php?id=$product_id';</script>";
-    exit();
+echo "<script>alert('Failed to update purchase status! Contact support.'); window.location='homepage.php';</script>";
+exit();
+}
 }
 ?>

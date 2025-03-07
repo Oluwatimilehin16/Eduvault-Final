@@ -15,12 +15,12 @@
     </div>
 
     <nav class="navbar">
-        <ul>
-        <li><a href="homepage.html">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Contact</a></li>
-        </ul>
+    <ul>
+                <li><a href="homepage.php">Home</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="course.php">Courses</a></li>
+                <li><a href="contact.php">Contact</a></li>
+            </ul>
     </nav>
 
     <div class="icons">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="user-box">
-        <p>Username: <span><?php echo isset($_SESSION['student_firstname']) ? $_SESSION['student_firstname'] : 'Guest'; ?></span></p>
+        <p>Username: <span><?php echo isset($_SESSION['student_name']) ? $_SESSION['student_name'] : 'Guest'; ?></span></p>
         <p>Email: <span><?php echo isset($_SESSION['student_email']) ? $_SESSION['student_email'] : 'Not available'; ?></span></p>
 
         <form method="post" action="logout.php">

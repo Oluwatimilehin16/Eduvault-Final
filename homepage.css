@@ -208,17 +208,20 @@ nav ul li:hover {
     transform: scale(1.05);
 }
 
-/* Download Button */
-.download-btn {
-    background-color: #ffcc00; /* Yellow */
+.library-btn {
+    background-color: #ffcc00;
     color: #1E3A8A;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: bold;
 }
 
-.download-btn:hover {
-    background-color: #1E3A8A;
-    color: #fff;
-    transform: scale(1.05);
+.library-btn:hover {
+    background-color: #e6b800;
 }
+
 
 .testimonial-section {
     display: flex;
@@ -247,28 +250,7 @@ nav ul li:hover {
     text-align: right;
     margin-top: 10px;
 }
-.cta-section {
-    text-align: center;
-    background: #1E3A8A;
-    color: white;
-    padding: 30px;
-   
-}
 
-.cta-btn {
-    display: inline-block;
-    padding: 12px 20px;
-    background: #ffcc00;
-    color: #1E3A8A;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.cta-btn:hover {
-    background: #ffd633;
-}
 .faq-section {
     padding: 20px;
     width: 80%;  /* Adjust the width as needed */
@@ -289,6 +271,80 @@ nav ul li:hover {
 .faq p {
     font-size: 14px;
     color: #333;
+}
+/* Footer Styling */
+footer {
+    background-color: #1E3A8A;
+    color: white;
+    padding: 20px 20px;
+    margin-top: 10px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+}
+
+.footer-section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #ffcc00;
+}
+
+.footer-section p, 
+.footer-section ul li a {
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a:hover {
+    color: #ffcc00;
+}
+
+.footer-teach {
+    text-align: center;
+    padding: 5px 0;
+    font-size: 16px;
+}
+
+.footer-teach a {
+    color: #ffcc00; /* Your yellow color */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.footer-teach a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    text-align: center;
+    padding-top: 10px;
+    font-size: 14px;
+    border-top: 1px solid #fff;
+    margin-top: 10px;
+    padding-bottom: 0px;
 }
 
 

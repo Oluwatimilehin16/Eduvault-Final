@@ -59,4 +59,3 @@ function searchInPDF() {
         iframe.src = iframe.src.split("#")[0] + "#search=" + encodeURIComponent(searchText);
     }
 }
-

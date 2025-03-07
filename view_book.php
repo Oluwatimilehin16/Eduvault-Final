@@ -1,6 +1,10 @@
 <?php
 include 'connection.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+error_log(print_r(headers_list(), true));
+
 
 if (!isset($_SESSION['student_id'])) {
     die("Unauthorized access!");

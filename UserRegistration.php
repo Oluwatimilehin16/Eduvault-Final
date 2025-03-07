@@ -18,7 +18,7 @@ if(isset($_POST['submit'])){
                 $message[] = 'Passwords do not match!';
             }else{
                 mysqli_query($conn, "INSERT INTO `user`(`firstname`,`lastname`, `email`, `password`) 
-                VALUES ('$firsname','$lastname', '$email', '$password')") or die ('query failed');
+                VALUES ('$firstname','$lastname', '$email', '$password')") or die ('query failed');
            $message[]= 'registered successfully';
            header("refresh:2;url=homepage.php");
         }
@@ -46,10 +46,10 @@ if(isset($_POST['submit'])){
         </div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Contact</a></li>
+            <li><a href="homepage.php">Home</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="course.php">Courses</a></li>
+                <li><a href="contact.php">Contact</a></li>
                 <li><a href="login.php" class="login-btn">Login</a></li>
             </ul>
         </nav>
