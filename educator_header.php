@@ -15,7 +15,7 @@
         <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <ul>
             <li><a href="homepage.php">Home</a></li>
             <li><a href="educator_product.php">My Uploads</a></li>
@@ -24,9 +24,9 @@
         </ul>
     </nav>
 
-    <div class="icons">
-        <i class="bi bi-person" id="user-btn"></i>
-        <i class="bi bi-list" id="menu-btn"></i>
+    <div class="menu-icons">
+        <i class="bi bi-person" id="user-btn"></i> <!-- Profile Icon -->
+        <img src="./assets/ham.png" alt="Menu" id="menu-btn"> <!-- Hamburger Icon -->
     </div>
 
     <div class="user-box">

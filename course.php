@@ -30,6 +30,7 @@ $student_id = $_SESSION['student_id'] ?? null;
             <input type="text" id="searchInput" placeholder="Search for books..." onkeyup="searchBooks()">
             <button onclick="searchBooks()">Search</button>
         </div>
+
         <div class="nav">
         <nav>
             <ul>
@@ -39,54 +40,53 @@ $student_id = $_SESSION['student_id'] ?? null;
                 <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
+        <img src="./assets/ham.png" id="menu-btn" alt="Menu">
     </div>
+
     </header>
 <section class="courses">
-    <?php 
-    if (mysqli_num_rows($books_query) > 0) {
-        $current_section = null;
+<?php 
+if (mysqli_num_rows($books_query) > 0) {
+    $current_section = null;
 
-        while ($book = mysqli_fetch_assoc($books_query)) {
-            if ($current_section !== $book['section']) {
-                if ($current_section !== null) echo '</div>'; 
-                $current_section = $book['section'];
-                echo "<h2 class='section-title'>" . ucfirst($current_section) . "</h2>";
-                echo "<div class='course-list'>";
-            }
-
-            $has_purchased = false;
-            if ($student_id) {
-                $purchase_check = mysqli_query($conn, "SELECT * FROM purchases WHERE student_id = '$student_id' AND product_id = '{$book['id']}' AND status = 'paid'");
-                $has_purchased = mysqli_num_rows($purchase_check) > 0;
-            }
-    ?>
-    <div class="show-products">
-            <div class="box-container1">
-            <div class="course">
-                <img src="uploads/covers/<?php echo $book['cover_img']; ?>" alt="Cover">
-                <h3><?php echo $book['title']; ?></h3>
-                <p><?php echo $book['description']; ?></p>
-                <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>
-
-                <?php if ($student_id): ?>
-                    <?php if ($has_purchased): ?>
-                        <a href="<?php echo $book['file_path']; ?>" download class="btn download-btn">Download</a>
-                    <?php else: ?>
-                        <a href="checkout.php?id=<?php echo $book['id']; ?>" class="btn buy-btn">Buy Now</a>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <a href="login.php" class="btn login-btn">Login to Buy</a>
-                <?php endif; ?>
-            </div>
-            </div>
-            </div>
-    <?php
+    while ($book = mysqli_fetch_assoc($books_query)) {
+        if ($current_section !== $book['section']) {
+            if ($current_section !== null) echo '</div></div>'; // Close previous section
+            $current_section = $book['section'];
+            echo "<h2 class='section-title'>" . ucfirst($current_section) . "</h2>";
+            echo "<div class='show-products'><div class='box-container1'>"; // Open new section
         }
-        echo '</div>'; 
-    } else {
-        echo "<p class='no-books'>No books found.</p>";
+
+        $has_purchased = false;
+        if ($student_id) {
+            $purchase_check = mysqli_query($conn, "SELECT * FROM purchases WHERE student_id = '$student_id' AND product_id = '{$book['id']}' AND status = 'paid'");
+            $has_purchased = mysqli_num_rows($purchase_check) > 0;
+        }
+?>
+        <div class="course">
+            <img src="uploads/covers/<?php echo $book['cover_img']; ?>" alt="Cover">
+            <h3><?php echo $book['title']; ?></h3>
+            <p><?php echo $book['description']; ?></p>
+            <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>
+
+            <?php if ($student_id): ?>
+                <?php if ($has_purchased): ?>
+                    <a href="<?php echo $book['file_path']; ?>" download class="btn download-btn">Download</a>
+                <?php else: ?>
+                    <a href="checkout.php?id=<?php echo $book['id']; ?>" class="btn buy-btn">Buy Now</a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="login.php" class="btn login-btn">Login to Buy</a>
+            <?php endif; ?>
+        </div>
+<?php
     }
-    ?>
+    echo '</div></div>'; // Close last section
+} else {
+    echo "<p class='no-books'>No books found.</p>";
+}
+?>
+
 </section>
 
 <footer>
@@ -116,6 +116,11 @@ function searchBooks() {
         section.style.display = anyVisible ? "block" : "none";
     });
 }
+document.getElementById("menu-btn").addEventListener("click", function() {
+    let navbar = document.querySelector("nav");
+    navbar.style.display = (navbar.style.display === "block") ? "none" : "block";
+});
+
 </script>
 
 </body>

@@ -22,26 +22,27 @@ $student_id = $_SESSION['student_id'] ?? null;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <header>
-        <div class="logo">
+<header>
+    <div class="logo">
         <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
-        </div>
-        <!-- Search Bar -->
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for books..." onkeyup="searchBooks()">
-            <button onclick="searchBooks()">Search</button>
-        </div>
-        <div class="nav">
-        <nav>
-            <ul>
-                <li><a href="homepage.php">Home</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="course.php">Courses</a></li>
-                <li><a href="library.php">Library</a></li>
-            </ul>
-        </nav>
     </div>
-    </header>
+
+    <!-- Hamburger Menu Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <img src="./assets/ham.png" alt="Menu">
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav id="mobileMenu">
+        <ul>
+            <li><a href="homepage.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="course.php">Courses</a></li>
+            <li><a href="library.php">Library</a></li>
+        </ul>
+    </nav>
+</header>
+
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <!-- Indicators (Dots) -->
         <div class="carousel-indicators">
@@ -177,7 +178,6 @@ $student_id = $_SESSION['student_id'] ?? null;
     </div>
 </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
       <footer>
     <div class="footer-container">
         <div class="footer-section about">
@@ -209,6 +209,7 @@ $student_id = $_SESSION['student_id'] ?? null;
         <p>&copy; 2025 EduVault. All Rights Reserved.</p>
     </div>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

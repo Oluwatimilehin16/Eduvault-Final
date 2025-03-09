@@ -70,7 +70,7 @@
                     working together to make learning secure, accessible, and rewarding for everyone.
                 </p>
             </div>
-            <img src="your-team-image.jpg" alt="Our Team">
+            <img src="./assets/team.jpg" alt="Our Team">
         </div>
 
         <!-- Call to Action -->

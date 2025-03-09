@@ -8,24 +8,25 @@
     <link rel="stylesheet" href="educator.css"> <!-- Link to educator-specific CSS -->
 </head>
 <body id="bg">
-
 <header id="header">
     <div class="logo">
         <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
     </div>
 
-    <nav class="navbar">
-    <ul>
-                <li><a href="homepage.php">Home</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="course.php">Courses</a></li>
-                <li><a href="contact.php">Contact</a></li>
-            </ul>
+    <!-- Navigation Menu -->
+    <nav class="navbar" id="navbar">
+        <ul>
+            <li><a href="homepage.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="course.php">Courses</a></li>
+            <li><a href="contact.php">Contact</a></li>
+        </ul>
     </nav>
 
-    <div class="icons">
-        <i class="bi bi-person" id="user-btn"></i>
-        <i class="bi bi-list" id="menu-btn"></i>
+     <!-- Icons Wrapper (Profile + Hamburger) -->
+     <div class="menu-icons">
+        <i class="bi bi-person" id="user-btn"></i> <!-- Profile Icon -->
+        <img src="./assets/ham.png" alt="Menu" id="menu-btn"> <!-- Hamburger Icon -->
     </div>
 
     <div class="user-box">
@@ -37,6 +38,7 @@
         </form>
     </div>
 </header>
+
 
 </body>
 </html>

@@ -37,23 +37,27 @@ if(isset($_POST['submit'])){
     <link rel="stylesheet" href="UserRegistration.css">
 </head>
 <body>
+<header>
+    <div class="logo">
+        <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
+    </div>
 
+    <!-- Hamburger Menu Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <img src="./assets/ham.png" alt="Menu">
+    </div>
 
-    <!--Header with Logo & Navigation -->
-    <header>
-        <div class="logo">
-            <a href="homepage.html"><img src="./assets/logo.png" alt="EduVault"></a>
-        </div>
-        <nav>
-            <ul>
+    <!-- Navigation Menu -->
+    <nav id="mobileMenu">
+        <ul>
             <li><a href="homepage.php">Home</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="course.php">Courses</a></li>
-                <li><a href="contact.php">Contact</a></li>
-                <li><a href="login.php" class="login-btn">Login</a></li>
-            </ul>
-        </nav>
-    </header>
+            <li><a href="about.php">About</a></li>
+            <li><a href="course.php">Courses</a></li>
+            <li><a href="contact.php">Contact</a></li>
+            <li><a href="login.php" class="login-btn">Login</a></li>
+        </ul>
+    </nav>
+</header>
 
     <?php
     if (isset($message)) {
@@ -68,7 +72,6 @@ if(isset($_POST['submit'])){
 ?>
 
     <div class="register-container">
-
     <!--Registration Form -->
         <form action="UserRegistration.php" method="POST" class="login-form">
             <h2>Sign Up</h2>
@@ -106,6 +109,6 @@ if(isset($_POST['submit'])){
             <p>&copy; 2025 EduVault. All rights reserved.</p>
         </div>
     </footer>
-
+<script src="script.js"></script>
 </body>
 </html>

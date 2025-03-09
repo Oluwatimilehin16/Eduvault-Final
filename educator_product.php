@@ -173,7 +173,7 @@ if (isset($_POST['update_book'])) {
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="input-field">
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title" maxlength="60" required>
+                <input type="text" id="title" name="title" maxlength="70" required>
             </div>
 
             <div class="input-field">
@@ -320,62 +320,59 @@ if (isset($_POST['update_book'])) {
             </div>
 
             <div class="input-field">
-    <label for="category">Category:</label>
-    <select id="category" name="category" required>
-        <option value="" disabled>Select a category</option>
+    <label for="section">Category:</label>
+    <select name="section" id="section" required>
+    <option value="" disabled>Select a section</option>
+    <optgroup label="Academic">
+        <option value="science" <?php echo ($edit_data['section'] == 'science') ? 'selected' : ''; ?>>Science</option>
+        <option value="mathematics" <?php echo ($edit_data['section'] == 'mathematics') ? 'selected' : ''; ?>>Mathematics</option>
+        <option value="engineering" <?php echo ($edit_data['section'] == 'engineering') ? 'selected' : ''; ?>>Engineering</option>
+        <option value="medicine" <?php echo ($edit_data['section'] == 'medicine') ? 'selected' : ''; ?>>Medicine & Health</option>
+        <option value="law" <?php echo ($edit_data['section'] == 'law') ? 'selected' : ''; ?>>Law</option>
+        <option value="arts" <?php echo ($edit_data['section'] == 'arts') ? 'selected' : ''; ?>>Arts & Humanities</option>
+        <option value="social_science" <?php echo ($edit_data['section'] == 'social_science') ? 'selected' : ''; ?>>Social Science</option>
+    </optgroup>
+    <optgroup label="Technology">
+        <option value="programming" <?php echo ($edit_data['section'] == 'programming') ? 'selected' : ''; ?>>Programming</option>
+        <option value="ai_ml" <?php echo ($edit_data['section'] == 'ai_ml') ? 'selected' : ''; ?>>Artificial Intelligence & Machine Learning</option>
+        <option value="cybersecurity" <?php echo ($edit_data['section'] == 'cybersecurity') ? 'selected' : ''; ?>>Cybersecurity</option>
+        <option value="data_science" <?php echo ($edit_data['section'] == 'data_science') ? 'selected' : ''; ?>>Data Science</option>
+        <option value="web_dev" <?php echo ($edit_data['section'] == 'web_dev') ? 'selected' : ''; ?>>Web Development</option>
+    </optgroup>
+    <optgroup label="Fiction">
+        <option value="fantasy" <?php echo ($edit_data['section'] == 'fantasy') ? 'selected' : ''; ?>>Fantasy</option>
+        <option value="sci_fi" <?php echo ($edit_data['section'] == 'sci_fi') ? 'selected' : ''; ?>>Science Fiction</option>
+        <option value="romance" <?php echo ($edit_data['section'] == 'romance') ? 'selected' : ''; ?>>Romance</option>
+        <option value="mystery" <?php echo ($edit_data['section'] == 'mystery') ? 'selected' : ''; ?>>Mystery & Thriller</option>
+        <option value="horror" <?php echo ($edit_data['section'] == 'horror') ? 'selected' : ''; ?>>Horror</option>
+        <option value="historical_fiction" <?php echo ($edit_data['section'] == 'historical_fiction') ? 'selected' : ''; ?>>Historical Fiction</option>
+    </optgroup>
 
-        <optgroup label="Academic">
-            <option value="science" <?php echo ($edit_data['category'] == 'science') ? 'selected' : ''; ?>>Science</option>
-            <option value="mathematics" <?php echo ($edit_data['category'] == 'mathematics') ? 'selected' : ''; ?>>Mathematics</option>
-            <option value="engineering" <?php echo ($edit_data['category'] == 'engineering') ? 'selected' : ''; ?>>Engineering</option>
-            <option value="medicine" <?php echo ($edit_data['category'] == 'medicine') ? 'selected' : ''; ?>>Medicine & Health</option>
-            <option value="law" <?php echo ($edit_data['category'] == 'law') ? 'selected' : ''; ?>>Law</option>
-            <option value="arts" <?php echo ($edit_data['category'] == 'arts') ? 'selected' : ''; ?>>Arts & Humanities</option>
-            <option value="social_science" <?php echo ($edit_data['category'] == 'social_science') ? 'selected' : ''; ?>>Social Science</option>
-        </optgroup>
+    <optgroup label="Non-Fiction">
+        <option value="biography" <?php echo ($edit_data['section'] == 'biography') ? 'selected' : ''; ?>>Biography & Memoir</option>
+        <option value="self_help" <?php echo ($edit_data['section'] == 'self_help') ? 'selected' : ''; ?>>Self-Help</option>
+        <option value="business" <?php echo ($edit_data['section'] == 'business') ? 'selected' : ''; ?>>Business & Finance</option>
+        <option value="psychology" <?php echo ($edit_data['section'] == 'psychology') ? 'selected' : ''; ?>>Psychology</option>
+        <option value="philosophy" <?php echo ($edit_data['section'] == 'philosophy') ? 'selected' : ''; ?>>Philosophy</option>
+        <option value="history" <?php echo ($edit_data['section'] == 'history') ? 'selected' : ''; ?>>History</option>
+    </optgroup>
 
-        <optgroup label="Technology">
-            <option value="programming" <?php echo ($edit_data['category'] == 'programming') ? 'selected' : ''; ?>>Programming</option>
-            <option value="ai_ml" <?php echo ($edit_data['category'] == 'ai_ml') ? 'selected' : ''; ?>>Artificial Intelligence & Machine Learning</option>
-            <option value="cybersecurity" <?php echo ($edit_data['category'] == 'cybersecurity') ? 'selected' : ''; ?>>Cybersecurity</option>
-            <option value="data_science" <?php echo ($edit_data['category'] == 'data_science') ? 'selected' : ''; ?>>Data Science</option>
-            <option value="web_dev" <?php echo ($edit_data['category'] == 'web_dev') ? 'selected' : ''; ?>>Web Development</option>
-        </optgroup>
+    <optgroup label="Entertainment & Hobbies">
+        <option value="gaming" <?php echo ($edit_data['section'] == 'gaming') ? 'selected' : ''; ?>>Gaming</option>
+        <option value="comics" <?php echo ($edit_data['section'] == 'comics') ? 'selected' : ''; ?>>Comics & Graphic Novels</option>
+        <option value="music" <?php echo ($edit_data['section'] == 'music') ? 'selected' : ''; ?>>Music</option>
+        <option value="film" <?php echo ($edit_data['section'] == 'film') ? 'selected' : ''; ?>>Film & TV</option>
+        <option value="sports" <?php echo ($edit_data['section'] == 'sports') ? 'selected' : ''; ?>>Sports</option>
+        <option value="cooking" <?php echo ($edit_data['section'] == 'cooking') ? 'selected' : ''; ?>>Cooking & Food</option>
+    </optgroup>
 
-        <optgroup label="Fiction">
-            <option value="fantasy" <?php echo ($edit_data['category'] == 'fantasy') ? 'selected' : ''; ?>>Fantasy</option>
-            <option value="sci_fi" <?php echo ($edit_data['category'] == 'sci_fi') ? 'selected' : ''; ?>>Science Fiction</option>
-            <option value="romance" <?php echo ($edit_data['category'] == 'romance') ? 'selected' : ''; ?>>Romance</option>
-            <option value="mystery" <?php echo ($edit_data['category'] == 'mystery') ? 'selected' : ''; ?>>Mystery & Thriller</option>
-            <option value="horror" <?php echo ($edit_data['category'] == 'horror') ? 'selected' : ''; ?>>Horror</option>
-            <option value="historical_fiction" <?php echo ($edit_data['category'] == 'historical_fiction') ? 'selected' : ''; ?>>Historical Fiction</option>
-        </optgroup>
-
-        <optgroup label="Non-Fiction">
-            <option value="biography" <?php echo ($edit_data['category'] == 'biography') ? 'selected' : ''; ?>>Biography & Memoir</option>
-            <option value="self_help" <?php echo ($edit_data['category'] == 'self_help') ? 'selected' : ''; ?>>Self-Help</option>
-            <option value="business" <?php echo ($edit_data['category'] == 'business') ? 'selected' : ''; ?>>Business & Finance</option>
-            <option value="psychology" <?php echo ($edit_data['category'] == 'psychology') ? 'selected' : ''; ?>>Psychology</option>
-            <option value="philosophy" <?php echo ($edit_data['category'] == 'philosophy') ? 'selected' : ''; ?>>Philosophy</option>
-            <option value="history" <?php echo ($edit_data['category'] == 'history') ? 'selected' : ''; ?>>History</option>
-        </optgroup>
-
-        <optgroup label="Entertainment & Hobbies">
-            <option value="gaming" <?php echo ($edit_data['category'] == 'gaming') ? 'selected' : ''; ?>>Gaming</option>
-            <option value="comics" <?php echo ($edit_data['category'] == 'comics') ? 'selected' : ''; ?>>Comics & Graphic Novels</option>
-            <option value="music" <?php echo ($edit_data['category'] == 'music') ? 'selected' : ''; ?>>Music</option>
-            <option value="film" <?php echo ($edit_data['category'] == 'film') ? 'selected' : ''; ?>>Film & TV</option>
-            <option value="sports" <?php echo ($edit_data['category'] == 'sports') ? 'selected' : ''; ?>>Sports</option>
-            <option value="cooking" <?php echo ($edit_data['category'] == 'cooking') ? 'selected' : ''; ?>>Cooking & Food</option>
-        </optgroup>
-
-        <optgroup label="Lifestyle & Personal Development">
-            <option value="travel" <?php echo ($edit_data['category'] == 'travel') ? 'selected' : ''; ?>>Travel</option>
-            <option value="fashion" <?php echo ($edit_data['category'] == 'fashion') ? 'selected' : ''; ?>>Fashion</option>
-            <option value="fitness" <?php echo ($edit_data['category'] == 'fitness') ? 'selected' : ''; ?>>Fitness & Wellness</option>
-            <option value="parenting" <?php echo ($edit_data['category'] == 'parenting') ? 'selected' : ''; ?>>Parenting & Family</option>
-            <option value="spirituality" <?php echo ($edit_data['category'] == 'spirituality') ? 'selected' : ''; ?>>Spirituality</option>
-        </optgroup>
+    <optgroup label="Lifestyle & Personal Development">
+        <option value="travel" <?php echo ($edit_data['section'] == 'travel') ? 'selected' : ''; ?>>Travel</option>
+        <option value="fashion" <?php echo ($edit_data['section'] == 'fashion') ? 'selected' : ''; ?>>Fashion</option>
+        <option value="fitness" <?php echo ($edit_data['section'] == 'fitness') ? 'selected' : ''; ?>>Fitness & Wellness</option>
+        <option value="parenting" <?php echo ($edit_data['section'] == 'parenting') ? 'selected' : ''; ?>>Parenting & Family</option>
+        <option value="spirituality" <?php echo ($edit_data['section'] == 'spirituality') ? 'selected' : ''; ?>>Spirituality</option>
+    </optgroup>
     </select>
 </div>
             <div class="input-field">

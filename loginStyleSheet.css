@@ -22,7 +22,6 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 50px 35px;
-    position: fixed;
     top: 0;
     left: 0;
     height:80px;
@@ -80,6 +79,14 @@ nav ul li:hover {
     padding:5px;
 }
 
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger img {
+    width: 40px;
+}
 
 /* Login Container */
 .login-container {
@@ -185,3 +192,30 @@ footer {
     padding: 0 20px;
 }
 
+@media (max-width: 768px) {
+    nav {
+        display: none; /* Hide menu initially */
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #1E3A8A;
+        width: 200px;
+        text-align: left;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    nav ul {
+        display: block;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger */
+    }
+}
