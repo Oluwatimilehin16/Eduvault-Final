@@ -11,7 +11,7 @@
 
 .checkout-container h2 {
     font-size: 24px;
-    color: #1E3A8A;
+    color:#ffcc00;
 }
 
 .product-details {
@@ -36,6 +36,14 @@
 .product-details p {
     font-size: 16px;
     color: #333;
+}
+#checkout-title {
+    color: #1E3A8A;
+    font-size: 3rem;
+    text-transform: capitalize;
+    font-weight: bold;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .btn {

@@ -3,6 +3,7 @@ include 'connection.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 // Ensure student is logged in
 if (!isset($_SESSION['student_id'])) {
     header('location:login.php');
@@ -10,6 +11,17 @@ if (!isset($_SESSION['student_id'])) {
 }
 
 $student_id = $_SESSION['student_id'];
+
+// Fetch the correct student details from the database if session values are missing
+if (!isset($_SESSION['student_name']) || !isset($_SESSION['student_email'])) {
+    $query = "SELECT firstname, lastname, email FROM `user` WHERE id = '$student_id' LIMIT 1";
+    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        $_SESSION['student_name'] = $row['firstname'] . ' ' . $row['lastname'];
+        $_SESSION['student_email'] = $row['email'];
+    }
+}
 
 // Fetch purchased books/videos
 $purchases_query = mysqli_query($conn, "SELECT p.*, purchases.purchase_date
@@ -29,11 +41,11 @@ $purchases_query = mysqli_query($conn, "SELECT p.*, purchases.purchase_date
     <link rel="stylesheet" href="library.css">
 </head>
 <body>
-
-<?php include 'student_header.php'; ?>
-
+<?php include 'profile.php'; ?>
+<?php include 'sidebar.php'; ?>
+<div class="content">
 <section class="library-container">
-    <h2>Your Library</h2>
+    <h1>Your Library</h1>
 
     <div class="library-box-container">
         <?php if (mysqli_num_rows($purchases_query) > 0): ?>
@@ -57,6 +69,7 @@ $purchases_query = mysqli_query($conn, "SELECT p.*, purchases.purchase_date
     </div>
 </section>
 
+</div>
 <script src="script.js"></script>
 </body>
 </html>

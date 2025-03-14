@@ -1,6 +1,9 @@
 <?php
 include 'connection.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -15,7 +18,7 @@ if (!isset($_SESSION['student_id'])) {
 
 $student_id = $_SESSION['student_id'];
 $student_email = $_SESSION['student_email'];
-$student_name = $_SESSION['student_firstname'];
+$student_name = $_SESSION['student_name'];
 
 
 // Check if a product ID is provided
@@ -59,9 +62,10 @@ $paystack_public_key = "pk_test_4729b3310d94eb3bfce9c491f7f685b9ebe12d22";
     <link rel="stylesheet" href="checkout.css"> <!-- Link to checkout styling -->
 </head>
 <body>
-
-<?php include 'student_header.php'; ?>  
-
+<?php include 'profile.php'; ?>
+<?php include 'sidebar.php'; ?>  
+<div class="content">
+    <h1 id="checkout-title">Checkout</h1>
 <section class="checkout-container">
     <h2>Confirm Your Purchase</h2>
 
@@ -82,6 +86,7 @@ $paystack_public_key = "pk_test_4729b3310d94eb3bfce9c491f7f685b9ebe12d22";
     <button type="button" class="btn" onclick="payWithPaystack()">Confirm Purchase</button>
     <a href="homepage.php" class="cancel-btn">Cancel</a>
 </section>
+</div>
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>

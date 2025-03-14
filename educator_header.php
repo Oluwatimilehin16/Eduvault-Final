@@ -19,7 +19,7 @@
         <ul>
             <li><a href="homepage.php">Home</a></li>
             <li><a href="educator_product.php">My Uploads</a></li>
-            <li><a href="educator_orders.php">Sales</a></li>
+            <li><a href="educator_sales.php">Sales</a></li>
             <li><a href="educator_dashboard.php">Dashboard</a></li>
         </ul>
     </nav>

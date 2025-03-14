@@ -66,6 +66,41 @@ nav ul li:hover {
 .hamburger img {
     width: 40px;
 }
+/* General Button Styling */
+.btn1 {
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    width: 120px; 
+    text-align: center;
+    display: inline-block;
+    
+}
+
+/* Gold Button (Register) */
+.btn-reg {
+    background-color: #ffcc00; 
+    color: #1E3A8A; 
+}
+
+.btn-reg:hover {
+    background-color: #e6b800; 
+}
+
+/* Blue Button (Login) */
+.btn-log {
+    background-color: #1E3A8A; 
+    color: white;
+    margin-left:10px ;
+}
+
+.btn-log:hover {
+    background-color: #153473; /
+}
 
 /* Ensure Carousel Images Cover the Screen */
 .carousel-item img {

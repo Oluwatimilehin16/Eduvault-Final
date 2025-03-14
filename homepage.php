@@ -41,6 +41,11 @@ $student_id = $_SESSION['student_id'] ?? null;
             <li><a href="library.php">Library</a></li>
         </ul>
     </nav>
+
+    <div>
+        <button class="btn1 btn-reg" onclick="window.location.href='UserRegistration.php'">Register</button>
+        <button class="btn1 btn-log" onclick="window.location.href='login.php'">Login</button>
+    </div>
 </header>
 
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">

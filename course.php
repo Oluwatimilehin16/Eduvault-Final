@@ -37,7 +37,7 @@ $student_id = $_SESSION['student_id'] ?? null;
                 <li><a href="homepage.php">Home</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="course.php">Courses</a></li>
-                <li><a href="contact.php">Contact</a></li>
+                <li><a href="library.php">Library</a></li>
             </ul>
         </nav>
         <img src="./assets/ham.png" id="menu-btn" alt="Menu">
@@ -71,7 +71,7 @@ if (mysqli_num_rows($books_query) > 0) {
 
             <?php if ($student_id): ?>
                 <?php if ($has_purchased): ?>
-                    <a href="<?php echo $book['file_path']; ?>" download class="btn download-btn">Download</a>
+                    <a href="library.php" class="btn library-btn">Go to Library</a>
                 <?php else: ?>
                     <a href="checkout.php?id=<?php echo $book['id']; ?>" class="btn buy-btn">Buy Now</a>
                 <?php endif; ?>

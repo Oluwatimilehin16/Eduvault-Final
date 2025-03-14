@@ -1,32 +1,49 @@
 <?php
 include 'connection.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if(isset($_POST['submit'])){
-
+// Check if form is submitted
+if(isset($_POST['submit'])) {
     $firstname = htmlspecialchars($_POST["firstname"]);
     $lastname  = htmlspecialchars($_POST["lastname"]);
     $email     = htmlspecialchars($_POST["email"]);
     $password  = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $user_type = "student";
 
-    $select_user=mysqli_query($conn, "SELECT * FROM `user` WHERE email='$email'") or die();
+    // Check if email already exists
+    $select_user = mysqli_query($conn, "SELECT * FROM `user` WHERE email='$email'") or die(mysqli_error($conn));
 
-        if(mysqli_num_rows($select_user)>0){
-            $message[] = 'user already exist';
-        }else{
-            if ($_POST['password'] !== $_POST['cpassword']) {
-                $message[] = 'Passwords do not match!';
-            }else{
-                mysqli_query($conn, "INSERT INTO `user`(`firstname`,`lastname`, `email`, `password`) 
-                VALUES ('$firstname','$lastname', '$email', '$password')") or die ('query failed');
-           $message[]= 'registered successfully';
-           header("refresh:2;url=homepage.php");
-        }
-        }
+    if(mysqli_num_rows($select_user) > 0) {
+        $message[] = 'User already exists!';
+    } else {
+        if ($_POST['password'] !== $_POST['cpassword']) {
+            $message[] = 'Passwords do not match!';
+        } else {
+            // Insert new user into the database
+            $query = "INSERT INTO `user`(`firstname`, `lastname`, `email`, `password`, `user_type`) 
+                      VALUES ('$firstname','$lastname', '$email', '$password', '$user_type')";
+            if (mysqli_query($conn, $query)) {
+                // Get the newly registered user's ID
+                $user_id = mysqli_insert_id($conn);
 
+                // Start session for the new user
+                $_SESSION['student_id'] = $user_id;
+                $_SESSION['firstname'] = $firstname;
+                $_SESSION['email'] = $email;
+
+                // Redirect to their personal library page
+                header("Location: library.php?user_id=" . $user_id);
+                exit();
+            } else {
+                $message[] = 'Registration failed, please try again!';
+            }
+        }
+    }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

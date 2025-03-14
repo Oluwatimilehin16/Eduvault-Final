@@ -28,14 +28,14 @@ if (isset($_POST['submit'])) {
                 $_SESSION['educator_id'] = $row['id'];  // Ensure this comes from the database
                 $_SESSION['educator_name'] = $row['firstname'];
                 $_SESSION['educator_email'] = $row['email'];
-                header("Location: educator_dashboard.php");
+                header("Location: educator_product.php");
                 exit();
                 
             } else {
                 $_SESSION['student_id'] = $row['id'];  // Ensure this comes from the database
                 $_SESSION['student_name'] = $row['firstname'];
                 $_SESSION['student_email'] = $row['email'];
-                header('location:homepage.php');
+                header('location:library.php');
                 exit();
             }
         } else {

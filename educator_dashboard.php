@@ -1,6 +1,8 @@
 <?php
 include 'connection.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $educator_id= $_SESSION['educator_name'];
 
 // Check if the user is logged in as an educator
@@ -16,9 +18,6 @@ if (!isset($_SESSION['educator_id'])) {
         exit();
         
     }
-
-
-
 $educator_id = $_SESSION['educator_id'];
 $educator_name = $_SESSION['educator_name'];
 

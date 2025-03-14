@@ -1,10 +1,14 @@
 .library-container {
     text-align: center;
     padding: 30px;
-    margin-top: 100px;
+    margin-top: 10px;
 }
-.library-container h2{
+.library-container h1{
+    font-size: 3.5rem;
     color: #1E3A8A;
+    text-transform: capitalize;
+    font-weight: bold;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
 }
 .library-box-container {
     display: grid;

@@ -191,14 +191,17 @@ nav ul li a:hover {
 
 /* Buy Now */
 .buy-btn {
+    background-color: #1E3A8A;
+    color:#ffcc00;
+}
+
+.library-btn {
     background-color: #ffcc00;
     color: #1E3A8A;
 }
 
-/* Download */
-.download-btn {
-    background-color: #1E3A8A;
-    color: #fff;
+.library-btn:hover {
+    background-color: #e6b800;
 }
 
 /* Login */
