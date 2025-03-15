@@ -1,5 +1,5 @@
 <?php
-require_once('connection.php');
+require_once('config.php');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -62,7 +62,7 @@ if(isset($_POST["submit"])) {
     </div>
     <nav>
         <ul>
-                <li><a href="homepage.php">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="course.php">Courses</a></li>
                 <li><a href="contact.php">Contact</a></li>

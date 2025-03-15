@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include 'config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -23,7 +23,7 @@ $student_id = $_SESSION['student_id'] ?? null;
 
 <header>
         <div class="logo">
-        <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
+        <a href="index.php"><img src="./assets/logo.png" alt="EduVault"></a>
         </div>
         <!-- Search Bar -->
         <div class="search-container">
@@ -34,7 +34,7 @@ $student_id = $_SESSION['student_id'] ?? null;
         <div class="nav">
         <nav>
             <ul>
-                <li><a href="homepage.php">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="course.php">Courses</a></li>
                 <li><a href="library.php">Library</a></li>

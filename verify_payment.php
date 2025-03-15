@@ -1,6 +1,6 @@
 
 <?php
-include 'connection.php';
+include 'config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -59,7 +59,7 @@ if ($update_purchase) {
 echo "<script>alert('Payment successful!'); window.location='library.php';</script>";
 exit();
 } else {
-echo "<script>alert('Failed to update purchase status! Contact support.'); window.location='homepage.php';</script>";
+echo "<script>alert('Failed to update purchase status! Contact support.'); window.location='index.php';</script>";
 exit();
 }
 }

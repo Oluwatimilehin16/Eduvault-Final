@@ -12,12 +12,12 @@
 
 <header id="header">
     <div class="logo">
-        <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
+        <a href="index.php"><img src="./assets/logo.png" alt="EduVault"></a>
     </div>
 
     <nav class="navbar" id="navbar">
         <ul>
-            <li><a href="homepage.php">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li><a href="educator_product.php">My Uploads</a></li>
             <li><a href="educator_sales.php">Sales</a></li>
             <li><a href="educator_dashboard.php">Dashboard</a></li>

@@ -27,12 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 <header id="header">
     <div class="logo">
-        <a href="homepage.php"><img src="./assets/logo.png" alt="EduVault"></a>
+        <a href="index.php"><img src="./assets/logo.png" alt="EduVault"></a>
     </div>
 
     <nav class="navbar">
             <ul>
-                <li><a href="homepage.php">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="course.php">Courses</a></li>
                 <li><a href="contact.php">Contact</a></li>

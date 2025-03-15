@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include 'config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -35,14 +35,18 @@ $student_id = $_SESSION['student_id'] ?? null;
     <!-- Navigation Menu -->
     <nav id="mobileMenu">
         <ul>
-            <li><a href="homepage.php">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li><a href="about.php">About</a></li>
             <li><a href="course.php">Courses</a></li>
             <li><a href="library.php">Library</a></li>
+            <li class="mobile-buttons">
+           <button class="btn1 btn-reg" onclick="window.location.href='UserRegistration.php'">Register</button>
+           <button class="btn1 btn-log" onclick="window.location.href='login.php'">Login</button>
+           </li>
         </ul>
     </nav>
 
-    <div>
+    <div class="desktop-buttons">
         <button class="btn1 btn-reg" onclick="window.location.href='UserRegistration.php'">Register</button>
         <button class="btn1 btn-log" onclick="window.location.href='login.php'">Login</button>
     </div>

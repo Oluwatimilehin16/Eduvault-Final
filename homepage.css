@@ -62,6 +62,15 @@ nav ul li:hover {
     display: none;
     cursor: pointer;
 }
+.mobile-buttons {
+    /* Mobile-only buttons hidden on desktop */
+    display: none;
+  }
+  
+  /* Show desktop buttons by default */
+  .desktop-buttons {
+    display: block;
+  }
 
 .hamburger img {
     width: 40px;
@@ -354,7 +363,6 @@ footer {
 
 
 
-/* Ensure It Looks Good on Mobile */
 @media (max-width: 768px) {
     nav {
         display: none; /* Hide menu initially */
@@ -380,6 +388,17 @@ footer {
     .hamburger {
         display: block; /* Show hamburger */
     }
+
+    /* Hide desktop buttons on mobile */
+    .desktop-buttons {
+        display: none;
+    }
+
+    /* Show mobile buttons on mobile */
+    .mobile-buttons {
+        display: block;
+    }
+
     .hero-title {
         font-size: 2rem;
     }
@@ -393,11 +412,9 @@ footer {
         flex-direction: column;
         align-items: center;
     }
-
     .testimonial {
         width: 80%;
     }
-
 }
 
 @media (max-width: 480px) {

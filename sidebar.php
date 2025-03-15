@@ -120,7 +120,7 @@ if (!isset($_SESSION['student_id'])) {
         <a href="library.php"><img src="./assets/logo.png" alt="EduVault"></a>
     </div>
     <ul class="menu">
-        <li><a href="homepage.php">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="library.php">Library</a></li>
         <li><a href="course.php">Courses</a></li>
         <li><a href="contact.php">Contact</a></li>
