@@ -77,7 +77,7 @@ $student_id = $_SESSION['student_id'] ?? null;
                 <div class="hero-content">
                     <h1 class="hero-title">Learn at Your Own Pace</h1>
                     <p class="sub-hero">Access eBooks, videos, and interactive lessons anytime, anywhere.</p>
-                    <a href="#" class="btn btn-primary btn-lg">Explore Courses</a>
+                    <a href="course.php" class="btn btn-primary btn-lg">Explore Courses</a>
                 </div>
             </div>
             <div class="carousel-item">

@@ -4,44 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
 .user-box {
     position: absolute;
-    top: 50px; /* Adjusted to appear above the icon */
-    right: 10px;
-    background: rgba(173, 216, 230, 0.7);
-    box-shadow: var(--box-shadow);
-    border-radius: .5rem;
+    top: 50px;
+    right: 15px;
+    background: rgba(173, 216, 230, 0.9); /* Light blue with opacity */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
     padding: 1rem;
     text-align: center;
     width: 18rem;
-    transform: scale(1.0);
-    transform-origin: top right;
-    line-height: 2;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 1000; /* Ensures it stays above other elements */
+    z-index: 1000;
+    display: none;
 }
 
+/* When active class is applied */
 .user-box.active {
-    opacity: 1;
-    visibility: visible;
+    display: block; 
 }
+
+/* Style for menu icons container */
 .menu-icons {
     position: fixed;
-    top: 20px; /* Distance from the top */
-    right: 25px; /* Distance from the right */
+    top: 20px;
+    right: 25px;
     display: flex;
     align-items: center;
-    z-index: 1000; /* Ensure it's above other elements */
+    z-index: 1000;
 }
 
+/* Style for the user button icon */
 .menu-icons i {
     font-size: 24px;
     cursor: pointer;
-    color:#1E3A8A;
+    color: #1E3A8A;
+    padding: 5px;
+}
+
+/* Hover effect for icon */
+.menu-icons i:hover {
+    color: #3B82F6;
 }
 
     </style>
@@ -49,8 +53,8 @@
 
 <body>
      <div class="menu-icons">
-        <i class="bi bi-person" id="user-btn"></i> <!-- Profile Icon -->
-    </div>
+    <i class="bi bi-person-circle" id="user-btn"></i> <!-- Changed to person-circle -->
+</div>
 
     <div class="user-box">
         <p>Username: <span><?php echo isset($_SESSION['student_name']) ? $_SESSION['student_name'] : 'Guest'; ?></span></p>

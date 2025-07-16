@@ -1,15 +1,52 @@
-document.addEventListener("DOMContentLoaded", function() {
-    let userBtn=document.querySelector('#user-btn');
-    let userBox=document.querySelector('.user-box');
+document.addEventListener("DOMContentLoaded", function () {
+    // USER BOX TOGGLE
+    const userBtn = document.querySelector('#user-btn');
+    const userBox = document.querySelector('.user-box');
 
-userBtn.addEventListener('click',function(){
-    userBox.classList.toggle('active');
+    console.log("User button found:", userBtn);
+    console.log("User box found:", userBox);
+
+    if (userBtn && userBox) {
+        userBtn.addEventListener('click', function(e) {
+            alert("Button clicked!");
+            userBox.classList.toggle('active');
+            e.stopPropagation();
+        });
+
+        userBox.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== userBtn && !userBox.contains(e.target)) {
+                userBox.classList.remove('active');
+            }
+        });
+
+        console.log("Event listeners added successfully");
+    }
+
+
+    // REVEAL ON SCROLL
+    function revealOnScroll() {
+        const elements = document.querySelectorAll(".animate");
+        elements.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.85) {
+                el.classList.add("active");
+            }
+        });
+    }
+
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll(); // Run on load
 });
-});
-document.getElementById("menu-btn").addEventListener("click", function() {
-    let navbar = document.getElementById("navbar");
-    navbar.style.display = (navbar.style.display === "block") ? "none" : "block";
-});
+
+// document.getElementById("menu-btn").addEventListener("click", function() {
+//     let navbar = document.getElementById("navbar");
+//     navbar.style.display = (navbar.style.display === "block") ? "none" : "block";
+// });
+
 
 function previewFile() {
     const file = document.getElementById("file").files[0];
@@ -59,17 +96,3 @@ function toggleMenu() {
     menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    function revealOnScroll() {
-        const elements = document.querySelectorAll(".animate");
-        elements.forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.85) {
-                el.classList.add("active");
-            }
-        });
-    }
-
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll(); // Run on load
-});

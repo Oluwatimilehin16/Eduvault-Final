@@ -20,10 +20,10 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
 $_SESSION['LAST_ACTIVITY'] = time();
 
 // Database connection
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "eduvault";
+$host = "sql102.infinityfree.com";
+$user = "if0_38998504";
+$password = "mliC9uNDTg";
+$database = "if0_38998504_Eduvault";
 
 $conn = new mysqli($host, $user, $password, $database);
 
