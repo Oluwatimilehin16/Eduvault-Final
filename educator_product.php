@@ -7,6 +7,173 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Add this debug section at the top of your file (after session_start)
+// REMOVE THIS AFTER DEBUGGING
+if (isset($_GET['debug'])) {
+    echo "<h3>DEBUG INFO:</h3>";
+    echo "Current directory: " . getcwd() . "<br>";
+    echo "Uploads directory exists: " . (file_exists('uploads/') ? 'YES' : 'NO') . "<br>";
+    echo "Uploads directory writable: " . (is_writable('uploads/') ? 'YES' : 'NO') . "<br>";
+    
+    // Check if uploads folder has files
+    if (file_exists('uploads/')) {
+        $files = scandir('uploads/');
+        echo "Files in uploads: " . count($files) - 2 . " files<br>"; // -2 for . and ..
+        foreach($files as $file) {
+            if ($file != '.' && $file != '..') {
+                echo "- $file (size: " . filesize('uploads/' . $file) . " bytes)<br>";
+            }
+        }
+    }
+    
+    // Check database entries
+    $debug_query = mysqli_query($conn, "SELECT id, title, cover_img, file_path FROM products WHERE educator_id = '$educator_id' LIMIT 5");
+    echo "<br><strong>Database entries:</strong><br>";
+    while($row = mysqli_fetch_assoc($debug_query)) {
+        echo "ID: {$row['id']} | Title: {$row['title']}<br>";
+        echo "Cover: {$row['cover_img']} (exists: " . (file_exists($row['cover_img']) ? 'YES' : 'NO') . ")<br>";
+        echo "File: {$row['file_path']} (exists: " . (file_exists($row['file_path']) ? 'YES' : 'NO') . ")<br><br>";
+    }
+    exit();
+}
+
+// IMPROVED FILE UPLOAD SECTION
+if (isset($_POST['add_book'])) {
+    // ... your existing validation code ...
+    
+    // REPLACE your file upload section with this improved version:
+    if ($file_error === UPLOAD_ERR_OK && $cover_error === UPLOAD_ERR_OK) {
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $cover_ext = strtolower(pathinfo($cover_image, PATHINFO_EXTENSION));
+        
+        $allowed_file_types = ['pdf', 'epub', 'mp4', 'avi', 'docx'];
+        $allowed_image_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        
+        // CREATE UPLOADS DIRECTORY WITH BETTER ERROR HANDLING
+        $upload_dir = 'uploads/';
+        if (!file_exists($upload_dir)) {
+            if (!mkdir($upload_dir, 0755, true)) {
+                $message[] = "Failed to create uploads directory! Check permissions.";
+                return;
+            }
+        }
+        
+        // Ensure the directory is writable
+        if (!is_writable($upload_dir)) {
+            chmod($upload_dir, 0755);
+            if (!is_writable($upload_dir)) {
+                $message[] = "Uploads directory is not writable! Check permissions.";
+                return;
+            }
+        }
+        
+        // Generate unique file names with timestamp for better uniqueness
+        $timestamp = time();
+        $file_path = $upload_dir . "book_" . $timestamp . "_" . uniqid() . "." . $file_ext;
+        $cover_image_new_name = $upload_dir . "cover_" . $timestamp . "_" . uniqid() . "." . $cover_ext;
+        
+        // Validation checks
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT title FROM `products` WHERE title = '$title'")) > 0) {
+            $message[] = 'Product name already exists';
+        } elseif (!in_array($file_ext, $allowed_file_types)) {
+            $message[] = "Invalid file type! Allowed types: " . implode(', ', $allowed_file_types);
+        } elseif (!in_array($cover_ext, $allowed_image_types)) {
+            $message[] = "Invalid image type! Allowed types: " . implode(', ', $allowed_image_types);
+        } elseif ($file_size > $upload_limit) {
+            $message[] = "File is too large! Maximum size: " . formatBytes($upload_limit);
+        } elseif ($cover_size > (20 * 1024 * 1024)) {
+            $message[] = "Cover image is too large! Maximum size: 20MB";
+        } else {
+            // Upload files with better error handling
+            $file_uploaded = move_uploaded_file($file_tmp, $file_path);
+            $cover_uploaded = move_uploaded_file($cover_tmp_name, $cover_image_new_name);
+            
+            if ($file_uploaded && $cover_uploaded) {
+                // Set proper permissions
+                chmod($file_path, 0644);
+                chmod($cover_image_new_name, 0644);
+                
+                // Verify files exist after upload
+                if (file_exists($file_path) && file_exists($cover_image_new_name)) {
+                    // Insert into database
+                    $insert_product = mysqli_query($conn, "INSERT INTO `products` 
+                        (`educator_id`, `title`, `price`, `description`, `category`, `section`, `file_path`, `cover_img`)
+                        VALUES ('$educator_id', '$title', '$price', '$description', '$category', '$section', '$file_path', '$cover_image_new_name')");
+
+                    if ($insert_product) {
+                        $message[] = "Files uploaded successfully!";
+                        // Log the upload for debugging
+                        error_log("File uploaded: $file_path, Cover: $cover_image_new_name");
+                        
+                        // Clear form data
+                        $form_data = ['title' => '', 'price' => '', 'description' => '', 'category' => '', 'section' => ''];
+                    } else {
+                        $message[] = "Database error: " . mysqli_error($conn);
+                        // Clean up files if database insert failed
+                        unlink($file_path);
+                        unlink($cover_image_new_name);
+                    }
+                } else {
+                    $message[] = "Files were moved but cannot be verified. Check server permissions.";
+                }
+            } else {
+                $message[] = "Failed to upload files! Error details: ";
+                if (!$file_uploaded) $message[] = "- Book file upload failed";
+                if (!$cover_uploaded) $message[] = "- Cover image upload failed";
+                $message[] = "Check directory permissions and disk space.";
+            }
+        }
+    }
+}
+
+// IMPROVED UPDATE SECTION
+if (isset($_POST['update_book'])) {
+    // ... your existing update code ...
+    
+    // For cover image update, use the same improved approach:
+    if (!empty($_FILES['cover_img']['name']) && $_FILES['cover_img']['error'] === UPLOAD_ERR_OK) {
+        $cover_img = $_FILES['cover_img']['name'];
+        $cover_tmp = $_FILES['cover_img']['tmp_name'];
+        $cover_size = $_FILES['cover_img']['size'];
+        $cover_ext = strtolower(pathinfo($cover_img, PATHINFO_EXTENSION));
+        
+        $upload_dir = 'uploads/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+        
+        $timestamp = time();
+        $cover_image_new_name = $upload_dir . "cover_" . $timestamp . "_" . uniqid() . "." . $cover_ext;
+
+        $allowed_image_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+        if (!in_array($cover_ext, $allowed_image_types)) {
+            $_SESSION['message'] = "Invalid image type!";
+            $update_success = false;
+        } elseif ($cover_size > (20 * 1024 * 1024)) {
+            $_SESSION['message'] = "Cover image is too large! Maximum: 20MB";
+            $update_success = false;
+        } elseif (move_uploaded_file($cover_tmp, $cover_image_new_name)) {
+            chmod($cover_image_new_name, 0644);
+            
+            // Verify file exists
+            if (file_exists($cover_image_new_name)) {
+                // Delete old cover image
+                if (!empty($current_data['cover_img']) && file_exists($current_data['cover_img'])) {
+                    unlink($current_data['cover_img']);
+                }
+                mysqli_query($conn, "UPDATE `products` SET cover_img = '$cover_image_new_name' WHERE id = '$update_id'");
+            } else {
+                $_SESSION['message'] = "Cover uploaded but file verification failed!";
+                $update_success = false;
+            }
+        } else {
+            $_SESSION['message'] = "Failed to upload cover image!";
+            $update_success = false;
+        }
+    }
+}
+
 // Ensure only educators can access this page
 if (!isset($_SESSION['educator_id'])) {
     header('location:login.php');
@@ -339,6 +506,13 @@ ob_end_flush();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educator Dashboard - Upload Books</title>
     <style>
+         .debug-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
         .message {
             background: #f8d7da;
             color: #721c24;
@@ -370,7 +544,10 @@ ob_end_flush();
 </head>
 <body>
     <?php include 'educator_header.php'; ?>
-    
+
+        <div class="debug-info">
+        <strong>Debug Mode:</strong> <a href="?debug=1" target="_blank">Click here to check file system status</a>
+    </div>
     <?php if (!empty($message)): ?>
         <?php foreach ($message as $msg): ?>
             <div class="message<?php echo (strpos($msg, 'successfully') !== false) ? ' success' : ''; ?>">
@@ -478,19 +655,27 @@ ob_end_flush();
     </section>
 
     <h2 id="cont-text">Your Uploaded Books</h2>
-    <section class="show-products">
+<section class="show-products">
         <div class="box-container1">
             <?php 
             $select_products = mysqli_query($conn, "SELECT * FROM `products` WHERE educator_id = '$educator_id'") or die('Query failed');
 
             if (mysqli_num_rows($select_products) > 0) {
                 while ($fetch_products = mysqli_fetch_assoc($select_products)) {
+                    // Check if image file actually exists
+                    $image_exists = !empty($fetch_products['cover_img']) && file_exists($fetch_products['cover_img']);
+                    $image_url = $image_exists ? $fetch_products['cover_img'] : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDIwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K';
                     ?>
                     <div class="box1">
-                        <img src="<?php echo htmlspecialchars($fetch_products['cover_img']); ?>?v=<?php echo time(); ?>" 
+                        <img src="<?php echo htmlspecialchars($image_url); ?>?v=<?php echo time(); ?>" 
                              alt="Book Cover" 
                              class="cover-image"
                              onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDIwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K';">
+                        
+                        <?php if (!$image_exists): ?>
+                            <small style="color: red;">Image file missing: <?php echo htmlspecialchars($fetch_products['cover_img']); ?></small>
+                        <?php endif; ?>
+                        
                         <p class="price">₦<?php echo number_format($fetch_products['price'], 2); ?></p>
                         <h3><?php echo htmlspecialchars($fetch_products['title']); ?></h3>
                         <p><?php echo htmlspecialchars($fetch_products['description']); ?></p>
