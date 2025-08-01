@@ -337,6 +337,7 @@ ob_end_flush();
             margin: 10px 0;
             border-radius: 4px;
             font-size: 0.9em;
+            text-align: center;
         }
     </style>
 </head>
