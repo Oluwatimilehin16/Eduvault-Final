@@ -33,21 +33,21 @@ if (isset($_POST['add_book'])) {
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     $section= mysqli_real_escape_string($conn, $_POST['section']);
 
-    // File upload handling
+    // File upload handling - save in root directory
     $file_name = $_FILES['file']['name'];
     $file_tmp = $_FILES['file']['tmp_name'];
     $file_size = $_FILES['file']['size'];
     $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
     $allowed_types = ['pdf', 'epub', 'mp4', 'avi', 'docx']; // Allowed formats
-    $upload_folder = "uploads/"; // Directory to save files
-    $file_path = $upload_folder . uniqid() . "." . $file_ext;
+    // Save files directly in root directory with unique prefix
+    $file_path = "book_" . uniqid() . "." . $file_ext;
 
-    // Handle cover image upload
+    // Handle cover image upload - save in root directory
     $cover_image = $_FILES['cover_img']['name'];
     $cover_tmp_name = $_FILES['cover_img']['tmp_name'];
-    $cover_image_new_name = uniqid() . "_" . $cover_image;
-    $cover_folder = "uploads/covers/" . $cover_image_new_name;
+    $cover_ext = strtolower(pathinfo($cover_image, PATHINFO_EXTENSION));
+    $cover_image_new_name = "cover_" . uniqid() . "." . $cover_ext;
 
     $select_title = mysqli_query($conn, "SELECT title FROM `products` WHERE title= '$title'") or die('query failed');
     
@@ -58,14 +58,16 @@ if (isset($_POST['add_book'])) {
     } elseif ($file_size > 50000000) { // Limit: 50MB
         $message[] = "File is too large!";
     } else {
-        if (move_uploaded_file($file_tmp, $file_path)) {
+        // Try to upload files to root directory
+        if (move_uploaded_file($file_tmp, $file_path) && move_uploaded_file($cover_tmp_name, $cover_image_new_name)) {
             $insert_product = mysqli_query($conn, "INSERT INTO `products` (`educator_id`, `title`, `price`, `description`, `category`, `section`, `file_path`, `cover_img`)
             VALUES ('$educator_id', '$title', '$price', '$description', '$category', '$section','$file_path', '$cover_image_new_name')") or die('query failed');
 
             if ($insert_product) {
-                move_uploaded_file($cover_tmp_name, $cover_folder);
                 $message[] = "File uploaded successfully!";
             }
+        } else {
+            $message[] = "Failed to upload files!";
         }
     }
 }
@@ -80,11 +82,11 @@ if (isset($_GET['delete'])) {
     if (mysqli_num_rows($check_book) > 0) {
         $fetch_delete = mysqli_fetch_assoc($check_book);
         
-        // Delete book files
-        if (!empty($fetch_delete['cover_img'])) {
-            unlink("uploads/covers/" . $fetch_delete['cover_img']);
+        // Delete book files from root directory
+        if (!empty($fetch_delete['cover_img']) && file_exists($fetch_delete['cover_img'])) {
+            unlink($fetch_delete['cover_img']);
         }
-        if (!empty($fetch_delete['file_path'])) {
+        if (!empty($fetch_delete['file_path']) && file_exists($fetch_delete['file_path'])) {
             unlink($fetch_delete['file_path']);
         }
 
@@ -95,7 +97,6 @@ if (isset($_GET['delete'])) {
         $message[] = "Unauthorized action!";
     }
 }
-
 
 // Fetch book details for editing
 if (isset($_GET['edit'])) {
@@ -122,29 +123,32 @@ if (isset($_POST['update_book'])) {
     if (!empty($_FILES['cover_img']['name'])) {
         $cover_img = $_FILES['cover_img']['name'];
         $cover_tmp = $_FILES['cover_img']['tmp_name'];
-        $cover_image_new_name = uniqid() . "_" . $cover_img;
-        $cover_folder = "uploads/covers/" . $cover_image_new_name;
+        $cover_ext = strtolower(pathinfo($cover_img, PATHINFO_EXTENSION));
+        $cover_image_new_name = "cover_" . uniqid() . "." . $cover_ext;
 
-        move_uploaded_file($cover_tmp, $cover_folder);
-
-        // Delete old cover image
-        unlink("uploads/covers/" . $edit_data['cover_img']);
-
-        mysqli_query($conn, "UPDATE `products` SET cover_img = '$cover_image_new_name' WHERE id = '$update_id'");
+        if (move_uploaded_file($cover_tmp, $cover_image_new_name)) {
+            // Delete old cover image if it exists
+            if (!empty($edit_data['cover_img']) && file_exists($edit_data['cover_img'])) {
+                unlink($edit_data['cover_img']);
+            }
+            mysqli_query($conn, "UPDATE `products` SET cover_img = '$cover_image_new_name' WHERE id = '$update_id'");
+        }
     }
 
     // Update file
     if (!empty($_FILES['file']['name'])) {
         $file_name = $_FILES['file']['name'];
         $file_tmp = $_FILES['file']['tmp_name'];
-        $file_path = "uploads/" . uniqid() . "_" . $file_name;
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $file_path = "book_" . uniqid() . "." . $file_ext;
 
-        move_uploaded_file($file_tmp, $file_path);
-
-        // Delete old file
-        unlink($edit_data['file_path']);
-
-        mysqli_query($conn, "UPDATE `products` SET file_path = '$file_path' WHERE id = '$update_id'");
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            // Delete old file if it exists
+            if (!empty($edit_data['file_path']) && file_exists($edit_data['file_path'])) {
+                unlink($edit_data['file_path']);
+            }
+            mysqli_query($conn, "UPDATE `products` SET file_path = '$file_path' WHERE id = '$update_id'");
+        }
     }
 
     // Update book details
@@ -271,7 +275,8 @@ if (isset($_POST['update_book'])) {
                 while ($fetch_products = mysqli_fetch_assoc($select_products)) {
                     ?>
                     <div class="box1">
-                        <img src="<?php echo 'uploads/covers/' . $fetch_products['cover_img']; ?>" alt="Book Cover" class="cover-image">
+                        <!-- Updated image path - no folder structure -->
+                        <img src="<?php echo $fetch_products['cover_img']; ?>" alt="Book Cover" class="cover-image">
                         <p class="price">₦<?php echo number_format($fetch_products['price'], 2); ?></p>
                         <h3><?php echo $fetch_products['title']; ?></h3>
                         <p><?php echo $fetch_products['description']; ?></p>
@@ -377,7 +382,8 @@ if (isset($_POST['update_book'])) {
 </div>
             <div class="input-field">
                 <label>Current Cover:</label>
-                <img src="<?php echo 'uploads/covers/' . $edit_data['cover_img']; ?>" alt="Book Cover" class="cover-preview">
+                <!-- Updated image path - no folder structure -->
+                <img src="<?php echo $edit_data['cover_img']; ?>" alt="Book Cover" class="cover-preview">
                 <input type="file" name="cover_img" accept="image/*">
             </div>
 
