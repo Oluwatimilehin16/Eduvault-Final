@@ -5,7 +5,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 error_log(print_r(headers_list(), true));
 
-
 if (!isset($_SESSION['student_id'])) {
     die("Unauthorized access!");
 }
@@ -36,15 +35,13 @@ if (!$book) {
 
 // Ensure correct file path is used
 $title = htmlspecialchars($book['title']);
-$file_path = "uploads/" . basename($book['file_path']); // Ensure no directory issues
+$file_path = basename($book['file_path']); 
 
 // Debugging: Log the book details (optional, remove in production)
 error_log("Book ID: $book_id | Title: $title | File Path: $file_path");
 
 if (!file_exists($file_path)) {
-
     die("File not found: " . $file_path);
-
 }
 ?>
 

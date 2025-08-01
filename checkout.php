@@ -70,7 +70,7 @@ $paystack_public_key = "pk_test_4729b3310d94eb3bfce9c491f7f685b9ebe12d22";
     <h2>Confirm Your Purchase</h2>
 
     <div class="product-details">
-        <img src="uploads/covers/<?php echo $product['cover_img']; ?>" alt="Book Cover">
+        <img src="<?php echo $product['cover_img']; ?>" alt="Book Cover">
         <h3><?php echo $product['title']; ?></h3>
         <p>Educator: <?php echo $product['educator_name']; ?></p>
         <p>Price: ₦<?php echo number_format($product['price'], 2); ?></p>

@@ -64,7 +64,7 @@ if (mysqli_num_rows($books_query) > 0) {
         }
 ?>
         <div class="course">
-            <img src="uploads/covers/<?php echo $book['cover_img']; ?>" alt="Cover">
+            <img src="<?php echo $book['cover_img']; ?>" alt="Cover">
             <h3><?php echo $book['title']; ?></h3>
             <p><?php echo $book['description']; ?></p>
             <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>

@@ -15,7 +15,7 @@ if (!isset($_GET['file'])) {
 }
 
 $file = basename($_GET['file']); // Prevent directory traversal
-$file_path = "uploads/" . $file;
+$file_path = $file;
 
 // Check if file exists
 if (!file_exists($file_path)) {

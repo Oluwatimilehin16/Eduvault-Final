@@ -108,7 +108,7 @@ $student_id = $_SESSION['student_id'] ?? null;
         while ($book = mysqli_fetch_assoc($new_books)) {
         ?>
             <div class="new-box">
-                <img src="uploads/covers/<?php echo $book['cover_img']; ?>" alt="Book Cover" class="cover-image">
+                <img src="<?php echo $book['cover_img']; ?>" alt="Book Cover" class="cover-image">
                 <h4><?php echo $book['title']; ?></h4>
                 <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>
                 <a href="checkout.php?id=<?php echo $book['id']; ?>" class="buy-btn">Buy Now</a>
@@ -131,7 +131,7 @@ $student_id = $_SESSION['student_id'] ?? null;
                 $has_purchased = $purchase_check && mysqli_num_rows($purchase_check) > 0;
         ?>
                 <div class="box1">
-                    <img src="uploads/covers/<?php echo $product['cover_img']; ?>" alt="Cover" class="cover-image">
+                    <img src="<?php echo $product['cover_img']; ?>" alt="Cover" class="cover-image">
                     <h4><?php echo $product['title']; ?></h4>
                     <p class="price">₦<?php echo number_format($product['price'], 2); ?></p>
 
