@@ -42,14 +42,42 @@ function formatBytes($bytes, $precision = 2) {
     return round($bytes, $precision) . ' ' . $units[$i];
 }
 
+// Set higher upload limits programmatically (if allowed)
+ini_set('upload_max_filesize', '100M');
+ini_set('post_max_size', '100M');
+ini_set('max_execution_time', 600);
+ini_set('max_input_time', 600);
+ini_set('memory_limit', '512M');
+
 // Check server upload limits
 $max_upload = (int)(ini_get('upload_max_filesize'));
 $max_post = (int)(ini_get('post_max_size'));
 $memory_limit = (int)(ini_get('memory_limit'));
 $upload_limit = min($max_upload, $max_post, $memory_limit) * 1024 * 1024; // Convert to bytes
 
+// If ini_set didn't work, set a reasonable default (100MB)
+if ($upload_limit < (100 * 1024 * 1024)) {
+    $upload_limit = 100 * 1024 * 1024; // 100MB fallback
+}
+
+// Initialize variables to preserve form data
+$form_data = [
+    'title' => '',
+    'price' => '',
+    'description' => '',
+    'category' => '',
+    'section' => ''
+];
+
 // Handle book upload
 if (isset($_POST['add_book'])) {
+    // Preserve form data for redisplay
+    $form_data['title'] = $_POST['title'] ?? '';
+    $form_data['price'] = $_POST['price'] ?? '';
+    $form_data['description'] = $_POST['description'] ?? '';
+    $form_data['category'] = $_POST['category'] ?? '';
+    $form_data['section'] = $_POST['section'] ?? '';
+    
     // Check if POST size exceeds limit
     if ($_SERVER['CONTENT_LENGTH'] > $upload_limit) {
         $message[] = "File is too large! Maximum allowed size is " . formatBytes($upload_limit) . 
@@ -116,8 +144,8 @@ if (isset($_POST['add_book'])) {
                 } elseif ($file_size > $upload_limit) {
                     $message[] = "File is too large! Maximum size: " . formatBytes($upload_limit) . 
                                 ". Your file: " . formatBytes($file_size);
-                } elseif ($cover_size > (5 * 1024 * 1024)) { // 5MB limit for images
-                    $message[] = "Cover image is too large! Maximum size: 5MB. Your image: " . formatBytes($cover_size);
+                } elseif ($cover_size > (20 * 1024 * 1024)) { // 20MB limit for images
+                    $message[] = "Cover image is too large! Maximum size: 20MB. Your image: " . formatBytes($cover_size);
                 } else {
                     // Try to upload files
                     if (move_uploaded_file($file_tmp, $file_path) && move_uploaded_file($cover_tmp_name, $cover_image_new_name)) {
@@ -126,6 +154,14 @@ if (isset($_POST['add_book'])) {
 
                         if ($insert_product) {
                             $message[] = "File uploaded successfully!";
+                            // Clear form data on success
+                            $form_data = [
+                                'title' => '',
+                                'price' => '',
+                                'description' => '',
+                                'category' => '',
+                                'section' => ''
+                            ];
                         } else {
                             $message[] = "Database error occurred!";
                         }
@@ -218,8 +254,8 @@ if (isset($_POST['update_book'])) {
         if (!in_array($cover_ext, $allowed_image_types)) {
             $_SESSION['message'] = "Invalid image type!";
             $update_success = false;
-        } elseif ($cover_size > (5 * 1024 * 1024)) {
-            $_SESSION['message'] = "Cover image is too large! Maximum: 5MB";
+        } elseif ($cover_size > (20 * 1024 * 1024)) {
+            $_SESSION['message'] = "Cover image is too large! Maximum: 20MB";
             $update_success = false;
         } elseif (move_uploaded_file($cover_tmp, $cover_image_new_name)) {
             // Delete old cover image
@@ -316,91 +352,91 @@ ob_end_flush();
     <?php endif; ?>
 
     <div class="file-size-info">
-        <strong>Upload Limits:</strong> Maximum file size: <?php echo formatBytes($upload_limit); ?> | Maximum image size: 5MB
+        <strong>Upload Limits:</strong> Maximum file size: <?php echo formatBytes($upload_limit); ?> | Maximum image size: 20MB
     </div>
     
     <section class="add-products form-container">
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="input-field">
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title" maxlength="70" required>
+                <input type="text" id="title" name="title" maxlength="70" value="<?php echo htmlspecialchars($form_data['title']); ?>" required>
             </div>
 
             <div class="input-field">
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="price" min="0" step="0.01" required>
+                <input type="number" id="price" name="price" min="0" step="0.01" value="<?php echo htmlspecialchars($form_data['price']); ?>" required>
             </div>
 
             <div class="input-field">
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
+                <textarea id="description" name="description" rows="4" required><?php echo htmlspecialchars($form_data['description']); ?></textarea>
             </div>
 
             <div class="input-field">
                 <label for="category">Category of File:</label>
                 <select id="category" name="category" required>
                     <option value="">Select Category</option>
-                    <option value="ebook">E-Book</option>
-                    <option value="video">Instructional Video</option>
+                    <option value="ebook" <?php echo ($form_data['category'] == 'ebook') ? 'selected' : ''; ?>>E-Book</option>
+                    <option value="video" <?php echo ($form_data['category'] == 'video') ? 'selected' : ''; ?>>Instructional Video</option>
                 </select>
             </div>
 
             <div class="input-field">
                 <label for="section">Section:</label>
                 <select name="section" id="section" required>
-                    <option value="" disabled selected>Select a category</option>
+                    <option value="" disabled <?php echo empty($form_data['section']) ? 'selected' : ''; ?>>Select a category</option>
                     <optgroup label="Academic">
-                        <option value="science">Science</option>
-                        <option value="mathematics">Mathematics</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="medicine">Medicine & Health</option>
-                        <option value="law">Law</option>
-                        <option value="arts">Arts & Humanities</option>
-                        <option value="social_science">Social Science</option>
+                        <option value="science" <?php echo ($form_data['section'] == 'science') ? 'selected' : ''; ?>>Science</option>
+                        <option value="mathematics" <?php echo ($form_data['section'] == 'mathematics') ? 'selected' : ''; ?>>Mathematics</option>
+                        <option value="engineering" <?php echo ($form_data['section'] == 'engineering') ? 'selected' : ''; ?>>Engineering</option>
+                        <option value="medicine" <?php echo ($form_data['section'] == 'medicine') ? 'selected' : ''; ?>>Medicine & Health</option>
+                        <option value="law" <?php echo ($form_data['section'] == 'law') ? 'selected' : ''; ?>>Law</option>
+                        <option value="arts" <?php echo ($form_data['section'] == 'arts') ? 'selected' : ''; ?>>Arts & Humanities</option>
+                        <option value="social_science" <?php echo ($form_data['section'] == 'social_science') ? 'selected' : ''; ?>>Social Science</option>
                     </optgroup>
                     <optgroup label="Technology">
-                        <option value="programming">Programming</option>
-                        <option value="ai_ml">Artificial Intelligence & Machine Learning</option>
-                        <option value="cybersecurity">Cybersecurity</option>
-                        <option value="data_science">Data Science</option>
-                        <option value="web_dev">Web Development</option>
+                        <option value="programming" <?php echo ($form_data['section'] == 'programming') ? 'selected' : ''; ?>>Programming</option>
+                        <option value="ai_ml" <?php echo ($form_data['section'] == 'ai_ml') ? 'selected' : ''; ?>>Artificial Intelligence & Machine Learning</option>
+                        <option value="cybersecurity" <?php echo ($form_data['section'] == 'cybersecurity') ? 'selected' : ''; ?>>Cybersecurity</option>
+                        <option value="data_science" <?php echo ($form_data['section'] == 'data_science') ? 'selected' : ''; ?>>Data Science</option>
+                        <option value="web_dev" <?php echo ($form_data['section'] == 'web_dev') ? 'selected' : ''; ?>>Web Development</option>
                     </optgroup>
                     <optgroup label="Fiction">
-                        <option value="fantasy">Fantasy</option>
-                        <option value="sci_fi">Science Fiction</option>
-                        <option value="romance">Romance</option>
-                        <option value="mystery">Mystery & Thriller</option>
-                        <option value="horror">Horror</option>
-                        <option value="historical_fiction">Historical Fiction</option>
+                        <option value="fantasy" <?php echo ($form_data['section'] == 'fantasy') ? 'selected' : ''; ?>>Fantasy</option>
+                        <option value="sci_fi" <?php echo ($form_data['section'] == 'sci_fi') ? 'selected' : ''; ?>>Science Fiction</option>
+                        <option value="romance" <?php echo ($form_data['section'] == 'romance') ? 'selected' : ''; ?>>Romance</option>
+                        <option value="mystery" <?php echo ($form_data['section'] == 'mystery') ? 'selected' : ''; ?>>Mystery & Thriller</option>
+                        <option value="horror" <?php echo ($form_data['section'] == 'horror') ? 'selected' : ''; ?>>Horror</option>
+                        <option value="historical_fiction" <?php echo ($form_data['section'] == 'historical_fiction') ? 'selected' : ''; ?>>Historical Fiction</option>
                     </optgroup>
                     <optgroup label="Non-Fiction">
-                        <option value="biography">Biography & Memoir</option>
-                        <option value="self_help">Self-Help</option>
-                        <option value="business">Business & Finance</option>
-                        <option value="psychology">Psychology</option>
-                        <option value="philosophy">Philosophy</option>
-                        <option value="history">History</option>
+                        <option value="biography" <?php echo ($form_data['section'] == 'biography') ? 'selected' : ''; ?>>Biography & Memoir</option>
+                        <option value="self_help" <?php echo ($form_data['section'] == 'self_help') ? 'selected' : ''; ?>>Self-Help</option>
+                        <option value="business" <?php echo ($form_data['section'] == 'business') ? 'selected' : ''; ?>>Business & Finance</option>
+                        <option value="psychology" <?php echo ($form_data['section'] == 'psychology') ? 'selected' : ''; ?>>Psychology</option>
+                        <option value="philosophy" <?php echo ($form_data['section'] == 'philosophy') ? 'selected' : ''; ?>>Philosophy</option>
+                        <option value="history" <?php echo ($form_data['section'] == 'history') ? 'selected' : ''; ?>>History</option>
                     </optgroup>
                     <optgroup label="Entertainment & Hobbies">
-                        <option value="gaming">Gaming</option>
-                        <option value="comics">Comics & Graphic Novels</option>
-                        <option value="music">Music</option>
-                        <option value="film">Film & TV</option>
-                        <option value="sports">Sports</option>
-                        <option value="cooking">Cooking & Food</option>
+                        <option value="gaming" <?php echo ($form_data['section'] == 'gaming') ? 'selected' : ''; ?>>Gaming</option>
+                        <option value="comics" <?php echo ($form_data['section'] == 'comics') ? 'selected' : ''; ?>>Comics & Graphic Novels</option>
+                        <option value="music" <?php echo ($form_data['section'] == 'music') ? 'selected' : ''; ?>>Music</option>
+                        <option value="film" <?php echo ($form_data['section'] == 'film') ? 'selected' : ''; ?>>Film</option>
+                        <option value="sports" <?php echo ($form_data['section'] == 'sports') ? 'selected' : ''; ?>>Sports</option>
+                        <option value="cooking" <?php echo ($form_data['section'] == 'cooking') ? 'selected' : ''; ?>>Cooking & Food</option>
                     </optgroup>
                     <optgroup label="Lifestyle & Personal Development">
-                        <option value="travel">Travel</option>
-                        <option value="fashion">Fashion</option>
-                        <option value="fitness">Fitness & Wellness</option>
-                        <option value="parenting">Parenting & Family</option>
-                        <option value="spirituality">Spirituality</option>
+                        <option value="travel" <?php echo ($form_data['section'] == 'travel') ? 'selected' : ''; ?>>Travel</option>
+                        <option value="fashion" <?php echo ($form_data['section'] == 'fashion') ? 'selected' : ''; ?>>Fashion</option>
+                        <option value="fitness" <?php echo ($form_data['section'] == 'fitness') ? 'selected' : ''; ?>>Fitness & Wellness</option>
+                        <option value="parenting" <?php echo ($form_data['section'] == 'parenting') ? 'selected' : ''; ?>>Parenting & Family</option>
+                        <option value="spirituality" <?php echo ($form_data['section'] == 'spirituality') ? 'selected' : ''; ?>>Spirituality</option>
                     </optgroup>
                 </select>
             </div>
 
             <div class="input-field">
-                <label for="img">Upload Cover Image (Max: 5MB):</label>
+                <label for="img">Upload Cover Image (Max: 20MB):</label>
                 <input type="file" id="img" name="cover_img" accept="image/*" required>
             </div>
 
@@ -557,9 +593,9 @@ ob_end_flush();
         });
         
         document.getElementById('img').addEventListener('change', function() {
-            const maxSize = 5 * 1024 * 1024; // 5MB
+            const maxSize = 20 * 1024 * 1024; // 20MB
             if (this.files[0] && this.files[0].size > maxSize) {
-                alert('Cover image is too large! Maximum size allowed: 5MB');
+                alert('Cover image is too large! Maximum size allowed: 20MB');
                 this.value = '';
             }
         });
