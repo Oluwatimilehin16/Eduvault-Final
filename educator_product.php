@@ -128,9 +128,14 @@ if (isset($_POST['add_book'])) {
                 $allowed_file_types = ['pdf', 'epub', 'mp4', 'avi', 'docx'];
                 $allowed_image_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
                 
-                // Generate unique file names
-                $file_path = "book_" . uniqid() . "." . $file_ext;
-                $cover_image_new_name = "cover_" . uniqid() . "." . $cover_ext;
+                // CREATE UPLOADS DIRECTORY AND GENERATE UNIQUE FILE NAMES
+                $upload_dir = 'uploads/';
+                if (!file_exists($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                
+                $file_path = $upload_dir . "book_" . uniqid() . "." . $file_ext;
+                $cover_image_new_name = $upload_dir . "cover_" . uniqid() . "." . $cover_ext;
 
                 // Check if title already exists
                 $select_title = mysqli_query($conn, "SELECT title FROM `products` WHERE title = '$title'") or die('Query failed');
@@ -149,6 +154,10 @@ if (isset($_POST['add_book'])) {
                 } else {
                     // Try to upload files
                     if (move_uploaded_file($file_tmp, $file_path) && move_uploaded_file($cover_tmp_name, $cover_image_new_name)) {
+                        // Set proper file permissions
+                        chmod($file_path, 0644);
+                        chmod($cover_image_new_name, 0644);
+                        
                         $insert_product = mysqli_query($conn, "INSERT INTO `products` (`educator_id`, `title`, `price`, `description`, `category`, `section`, `file_path`, `cover_img`)
                         VALUES ('$educator_id', '$title', '$price', '$description', '$category', '$section', '$file_path', '$cover_image_new_name')") or die('Query failed');
 
@@ -184,7 +193,7 @@ if (isset($_GET['delete'])) {
     if (mysqli_num_rows($check_book) > 0) {
         $fetch_delete = mysqli_fetch_assoc($check_book);
         
-        // Delete book files from root directory
+        // Delete book files
         if (!empty($fetch_delete['cover_img']) && file_exists($fetch_delete['cover_img'])) {
             unlink($fetch_delete['cover_img']);
         }
@@ -240,6 +249,12 @@ if (isset($_POST['update_book'])) {
     }
 
     $update_success = true;
+    
+    // Create uploads directory if it doesn't exist
+    $upload_dir = 'uploads/';
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
 
     // Update cover image if provided
     if (!empty($_FILES['cover_img']['name']) && $_FILES['cover_img']['error'] === UPLOAD_ERR_OK) {
@@ -247,7 +262,7 @@ if (isset($_POST['update_book'])) {
         $cover_tmp = $_FILES['cover_img']['tmp_name'];
         $cover_size = $_FILES['cover_img']['size'];
         $cover_ext = strtolower(pathinfo($cover_img, PATHINFO_EXTENSION));
-        $cover_image_new_name = "cover_" . uniqid() . "." . $cover_ext;
+        $cover_image_new_name = $upload_dir . "cover_" . uniqid() . "." . $cover_ext;
 
         $allowed_image_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -258,6 +273,9 @@ if (isset($_POST['update_book'])) {
             $_SESSION['message'] = "Cover image is too large! Maximum: 20MB";
             $update_success = false;
         } elseif (move_uploaded_file($cover_tmp, $cover_image_new_name)) {
+            // Set proper permissions
+            chmod($cover_image_new_name, 0644);
+            
             // Delete old cover image
             if (!empty($current_data['cover_img']) && file_exists($current_data['cover_img'])) {
                 unlink($current_data['cover_img']);
@@ -275,7 +293,7 @@ if (isset($_POST['update_book'])) {
         $file_tmp = $_FILES['file']['tmp_name'];
         $file_size = $_FILES['file']['size'];
         $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        $file_path = "book_" . uniqid() . "." . $file_ext;
+        $file_path = $upload_dir . "book_" . uniqid() . "." . $file_ext;
 
         $allowed_file_types = ['pdf', 'epub', 'mp4', 'avi', 'docx'];
 
@@ -286,6 +304,9 @@ if (isset($_POST['update_book'])) {
             $_SESSION['message'] = "File is too large! Maximum: " . formatBytes($upload_limit);
             $update_success = false;
         } elseif (move_uploaded_file($file_tmp, $file_path)) {
+            // Set proper permissions
+            chmod($file_path, 0644);
+            
             // Delete old file
             if (!empty($current_data['file_path']) && file_exists($current_data['file_path'])) {
                 unlink($current_data['file_path']);
@@ -338,6 +359,12 @@ ob_end_flush();
             border-radius: 4px;
             font-size: 0.9em;
             text-align: center;
+        }
+        .cover-image {
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -460,7 +487,10 @@ ob_end_flush();
                 while ($fetch_products = mysqli_fetch_assoc($select_products)) {
                     ?>
                     <div class="box1">
-                        <img src="<?php echo htmlspecialchars($fetch_products['cover_img']); ?>" alt="Book Cover" class="cover-image">
+                        <img src="<?php echo htmlspecialchars($fetch_products['cover_img']); ?>?v=<?php echo time(); ?>" 
+                             alt="Book Cover" 
+                             class="cover-image"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDIwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTI1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K';">
                         <p class="price">₦<?php echo number_format($fetch_products['price'], 2); ?></p>
                         <h3><?php echo htmlspecialchars($fetch_products['title']); ?></h3>
                         <p><?php echo htmlspecialchars($fetch_products['description']); ?></p>
@@ -562,7 +592,11 @@ ob_end_flush();
 
             <div class="input-field">
                 <label>Current Cover:</label>
-                <img src="<?php echo htmlspecialchars($edit_data['cover_img']); ?>" alt="Book Cover" class="cover-preview" style="max-width: 100px;">
+                <img src="<?php echo htmlspecialchars($edit_data['cover_img']); ?>?v=<?php echo time(); ?>" 
+                     alt="Book Cover" 
+                     class="cover-preview" 
+                     style="max-width: 100px;"
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEyNSIgdmlld0JveD0iMCAwIDEwMCAxMjUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTI1IiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI2MyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5OSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIj5ObyBJbWFnZTwvdGV4dD4KPHN2Zz4K';">
                 <input type="file" name="cover_img" accept="image/*">
                 <small>Leave empty to keep current cover</small>
             </div>
