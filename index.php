@@ -106,9 +106,11 @@ $student_id = $_SESSION['student_id'] ?? null;
         <?php
         $new_books = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC LIMIT 3");
         while ($book = mysqli_fetch_assoc($new_books)) {
+            // Check if we have the new base64 data or fall back to old path
+            $cover_image = !empty($book['cover_img_data']) ? $book['cover_img_data'] : $book['cover_img'];
         ?>
             <div class="new-box">
-                <img src="<?php echo $book['cover_img']; ?>" alt="Book Cover" class="cover-image">
+                <img src="<?php echo $cover_image; ?>" alt="Book Cover" class="cover-image" style="max-width: 200px; height: auto;">
                 <h4><?php echo $book['title']; ?></h4>
                 <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>
                 <a href="checkout.php?id=<?php echo $book['id']; ?>" class="buy-btn">Buy Now</a>
@@ -129,9 +131,12 @@ $student_id = $_SESSION['student_id'] ?? null;
             while ($product = mysqli_fetch_assoc($select_products)) {
                 $purchase_check = $student_id ? mysqli_query($conn, "SELECT * FROM purchases WHERE student_id = '$student_id' AND product_id = '{$product['id']}' AND status = 'paid'") : false;
                 $has_purchased = $purchase_check && mysqli_num_rows($purchase_check) > 0;
+                
+                // Check if we have the new base64 data or fall back to old path
+                $cover_image = !empty($product['cover_img_data']) ? $product['cover_img_data'] : $product['cover_img'];
         ?>
                 <div class="box1">
-                    <img src="<?php echo $product['cover_img']; ?>" alt="Cover" class="cover-image">
+                    <img src="<?php echo $cover_image; ?>" alt="Cover" class="cover-image" style="max-width: 200px; height: auto;">
                     <h4><?php echo $product['title']; ?></h4>
                     <p class="price">₦<?php echo number_format($product['price'], 2); ?></p>
 

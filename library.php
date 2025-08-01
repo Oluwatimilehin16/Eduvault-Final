@@ -51,7 +51,8 @@ $purchases_query = mysqli_query($conn, "SELECT p.*, purchases.purchase_date
         <?php if (mysqli_num_rows($purchases_query) > 0): ?>
             <?php while ($book = mysqli_fetch_assoc($purchases_query)): ?>
                 <div class="library-box">
-                    <img src="<?php echo $book['cover_img']; ?>" alt="Book Cover">
+                    <?php $cover_image = !empty($book['cover_img_data']) ? $book['cover_img_data'] : $book['cover_img']; ?>
+                    <img src="<?php echo $cover_image; ?>" alt="Cover" style="max-width: 200px; height: auto;">
                     <h3><?php echo htmlspecialchars($book['title']); ?></h3>
                     <p>Category: <?php echo ucfirst($book['category']); ?></p>
                     <p>Purchased on: <?php echo date("F j, Y", strtotime($book['purchase_date'])); ?></p>

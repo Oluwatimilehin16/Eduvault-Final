@@ -64,7 +64,8 @@ if (mysqli_num_rows($books_query) > 0) {
         }
 ?>
         <div class="course">
-            <img src="<?php echo $book['cover_img']; ?>" alt="Cover">
+            <?php $cover_image = !empty($book['cover_img_data']) ? $book['cover_img_data'] : $book['cover_img']; ?>
+<img src="<?php echo $cover_image; ?>" alt="Cover" style="max-width: 200px; height: auto;">
             <h3><?php echo $book['title']; ?></h3>
             <p><?php echo $book['description']; ?></p>
             <p class="price">₦<?php echo number_format($book['price'], 2); ?></p>
