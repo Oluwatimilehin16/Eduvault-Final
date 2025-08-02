@@ -1,7 +1,16 @@
 <?php
+// Start output buffering to prevent header issues
+ob_start();
+
 include 'config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Check for POST size limit exceeded
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0) {
+    $displayMaxSize = ini_get('post_max_size');
+    $message[] = "File upload failed! The file is too large. Maximum allowed size is $displayMaxSize.";
 }
 
 // Ensure only educators can access this page
@@ -50,37 +59,42 @@ if (isset($_POST['add_book'])) {
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     $section = mysqli_real_escape_string($conn, $_POST['section']);
 
-    // File upload handling
-    $file_name = $_FILES['file']['name'];
-    $file_size = $_FILES['file']['size'];
-    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-
-    $allowed_types = ['pdf', 'epub', 'mp4', 'avi', 'docx']; // Allowed formats
-
-    // Handle cover image upload
-    $cover_image_name = $_FILES['cover_img']['name'];
-    $cover_image_size = $_FILES['cover_img']['size'];
-
-    $select_title = mysqli_query($conn, "SELECT title FROM `products` WHERE title= '$title'") or die('query failed');
-    
-    if (mysqli_num_rows($select_title) > 0) {
-        $message[] = 'Product name already exists';
-    } elseif (!in_array($file_ext, $allowed_types)) {
-        $message[] = "Invalid file type!";
-    } elseif ($file_size > 50000000) { // Limit: 50MB
-        $message[] = "File is too large!";
-    } elseif ($cover_image_size > 5000000) { // Limit: 5MB for images
-        $message[] = "Cover image is too large!";
+    // Check if files were uploaded properly
+    if (!isset($_FILES['file']) || !isset($_FILES['cover_img'])) {
+        $message[] = "File upload failed! Please try again with smaller files.";
     } else {
-        // Convert files to base64
-        $cover_base64 = imageToBase64($_FILES['cover_img']);
-        $file_base64 = fileToBase64($_FILES['file']);
-        
-        $insert_product = mysqli_query($conn, "INSERT INTO `products` (`educator_id`, `title`, `price`, `description`, `category`, `section`, `file_data`, `cover_img_data`, `file_name`, `cover_img_name`)
-        VALUES ('$educator_id', '$title', '$price', '$description', '$category', '$section','$file_base64', '$cover_base64', '$file_name', '$cover_image_name')") or die('query failed');
+        // File upload handling
+        $file_name = $_FILES['file']['name'];
+        $file_size = $_FILES['file']['size'];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-        if ($insert_product) {
-            $message[] = "File uploaded successfully!";
+        $allowed_types = ['pdf', 'epub', 'mp4', 'avi', 'docx']; // Allowed formats
+
+        // Handle cover image upload
+        $cover_image_name = $_FILES['cover_img']['name'];
+        $cover_image_size = $_FILES['cover_img']['size'];
+
+        $select_title = mysqli_query($conn, "SELECT title FROM `products` WHERE title= '$title'") or die('query failed');
+        
+        if (mysqli_num_rows($select_title) > 0) {
+            $message[] = 'Product name already exists';
+        } elseif (!in_array($file_ext, $allowed_types)) {
+            $message[] = "Invalid file type!";
+        } elseif ($file_size > 8000000) { // Limit: 8MB (slightly less than server limit)
+            $message[] = "File is too large! Maximum file size is 8MB.";
+        } elseif ($cover_image_size > 2000000) { // Limit: 2MB for images
+            $message[] = "Cover image is too large! Maximum image size is 2MB.";
+        } else {
+            // Convert files to base64
+            $cover_base64 = imageToBase64($_FILES['cover_img']);
+            $file_base64 = fileToBase64($_FILES['file']);
+            
+            $insert_product = mysqli_query($conn, "INSERT INTO `products` (`educator_id`, `title`, `price`, `description`, `category`, `section`, `file_data`, `cover_img_data`, `file_name`, `cover_img_name`)
+            VALUES ('$educator_id', '$title', '$price', '$description', '$category', '$section','$file_base64', '$cover_base64', '$file_name', '$cover_image_name')") or die('query failed');
+
+            if ($insert_product) {
+                $message[] = "File uploaded successfully!";
+            }
         }
     }
 }
@@ -124,24 +138,37 @@ if (isset($_POST['update_book'])) {
 
     // Update cover image if new one is uploaded
     if (!empty($_FILES['cover_img']['name'])) {
-        $cover_base64 = imageToBase64($_FILES['cover_img']);
-        $cover_name = $_FILES['cover_img']['name'];
-        mysqli_query($conn, "UPDATE `products` SET cover_img_data = '$cover_base64', cover_img_name = '$cover_name' WHERE id = '$update_id'");
+        if ($_FILES['cover_img']['size'] > 2000000) {
+            $message[] = "Cover image is too large! Maximum size is 2MB.";
+        } else {
+            $cover_base64 = imageToBase64($_FILES['cover_img']);
+            $cover_name = $_FILES['cover_img']['name'];
+            mysqli_query($conn, "UPDATE `products` SET cover_img_data = '$cover_base64', cover_img_name = '$cover_name' WHERE id = '$update_id'");
+        }
     }
 
     // Update file if new one is uploaded
     if (!empty($_FILES['file']['name'])) {
-        $file_base64 = fileToBase64($_FILES['file']);
-        $file_name = $_FILES['file']['name'];
-        mysqli_query($conn, "UPDATE `products` SET file_data = '$file_base64', file_name = '$file_name' WHERE id = '$update_id'");
+        if ($_FILES['file']['size'] > 8000000) {
+            $message[] = "File is too large! Maximum size is 8MB.";
+        } else {
+            $file_base64 = fileToBase64($_FILES['file']);
+            $file_name = $_FILES['file']['name'];
+            mysqli_query($conn, "UPDATE `products` SET file_data = '$file_base64', file_name = '$file_name' WHERE id = '$update_id'");
+        }
     }
 
-    // Update book details
-    mysqli_query($conn, "UPDATE `products` SET title='$title', price='$price', description='$description', category='$category', section='$section' WHERE id='$update_id'") or die('Query failed');
-    $_SESSION['message'] = "Book updated successfully!";
-    header("Location: educator_product.php");
-    exit();    
+    // Update book details (only if no file size errors)
+    if (!isset($message)) {
+        mysqli_query($conn, "UPDATE `products` SET title='$title', price='$price', description='$description', category='$category', section='$section' WHERE id='$update_id'") or die('Query failed');
+        $_SESSION['message'] = "Book updated successfully!";
+        header("Location: educator_product.php");
+        exit();
+    }
 }
+
+// End output buffering and flush
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -150,16 +177,34 @@ if (isset($_POST['update_book'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educator Dashboard - Upload Books</title>
+    <style>
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .error-message {
+            color: #d32f2f;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .success-message {
+            color: #388e3c;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
     <?php include 'educator_header.php'; ?>
     <?php if (isset($message)) {
                 foreach ($message as $msg) {
-                    echo '<div class="message"><span>' . $msg . '</span></div>';
+                    $messageClass = (strpos($msg, 'success') !== false) ? 'success-message' : 'error-message';
+                    echo '<div class="message ' . $messageClass . '"><span>' . $msg . '</span></div>';
                 }
             } ?>
     <section class="add-products form-container">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
             <div class="input-field">
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" maxlength="70" required>
@@ -239,15 +284,19 @@ if (isset($_POST['update_book'])) {
 
             <div class="input-field">
                 <label for="img">Upload Cover Image:</label>
-                <input type="file" id="img" name="cover_img" accept="image/*" required>
+                <input type="file" id="img" name="cover_img" accept="image/*" required onchange="checkImageSize(this)">
+                <div class="file-info">Maximum size: 2MB. Supported formats: JPG, PNG, GIF</div>
+                <div id="imageError" class="error-message" style="display: none;"></div>
             </div>
 
             <div class="input-field">
                 <label for="file">Upload File (PDF, EPUB, MP4, etc.):</label>
-                <input type="file" id="file" name="file" accept=".pdf, .epub, .mp4, .avi" required>
+                <input type="file" id="file" name="file" accept=".pdf, .epub, .mp4, .avi, .docx" required onchange="checkFileSize(this)">
+                <div class="file-info">Maximum size: 8MB. Supported formats: PDF, EPUB, MP4, AVI, DOCX</div>
+                <div id="fileError" class="error-message" style="display: none;"></div>
             </div>
 
-            <input type="submit" name="add_book" value="Upload" class="btn">
+            <input type="submit" name="add_book" value="Upload" class="btn" id="submitBtn">
         </form>
     </section>
 
@@ -368,14 +417,14 @@ if (isset($_POST['update_book'])) {
                 <?php if (!empty($edit_data['cover_img_data'])): ?>
                     <img src="<?php echo $edit_data['cover_img_data']; ?>" alt="Book Cover" class="cover-preview" style="max-width: 150px; height: auto; display: block; margin: 10px 0;">
                 <?php endif; ?>
-                <input type="file" name="cover_img" accept="image/*">
-                <small>Leave empty to keep current cover</small>
+                <input type="file" name="cover_img" accept="image/*" onchange="checkImageSize(this)">
+                <div class="file-info">Leave empty to keep current cover. Maximum size: 2MB.</div>
             </div>
 
             <div class="input-field">
                 <label>Current File: <?php echo $edit_data['file_name']; ?></label>
-                <input type="file" name="file" accept=".pdf, .epub, .mp4, .avi">
-                <small>Leave empty to keep current file</small>
+                <input type="file" name="file" accept=".pdf, .epub, .mp4, .avi, .docx" onchange="checkFileSize(this)">
+                <div class="file-info">Leave empty to keep current file. Maximum size: 8MB.</div>
             </div>
 
             <input type="submit" name="update_book" value="Update Book" class="btn">
@@ -385,9 +434,61 @@ if (isset($_POST['update_book'])) {
     <?php endif; ?>
 
     <script>
+        function checkFileSize(input) {
+            const file = input.files[0];
+            const maxSize = 8 * 1024 * 1024; // 8MB in bytes
+            const errorDiv = document.getElementById('fileError');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (file && file.size > maxSize) {
+                errorDiv.textContent = `File is too large! Size: ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum allowed: 8MB.`;
+                errorDiv.style.display = 'block';
+                input.value = ''; // Clear the input
+                submitBtn.disabled = true;
+            } else {
+                errorDiv.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        function checkImageSize(input) {
+            const file = input.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+            const errorDiv = document.getElementById('imageError');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (file && file.size > maxSize) {
+                errorDiv.textContent = `Image is too large! Size: ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum allowed: 2MB.`;
+                errorDiv.style.display = 'block';
+                input.value = ''; // Clear the input
+                submitBtn.disabled = true;
+            } else {
+                errorDiv.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+        
         function closeEditForm() {
             window.location.href = 'educator_product.php';
         }
+        
+        // Form submission validation
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const fileInput = document.getElementById('file');
+            const imageInput = document.getElementById('img');
+            
+            if (fileInput.files[0] && fileInput.files[0].size > 8 * 1024 * 1024) {
+                e.preventDefault();
+                alert('Please select a file smaller than 8MB.');
+                return false;
+            }
+            
+            if (imageInput.files[0] && imageInput.files[0].size > 2 * 1024 * 1024) {
+                e.preventDefault();
+                alert('Please select an image smaller than 2MB.');
+                return false;
+            }
+        });
     </script>
 </body>
 </html>
