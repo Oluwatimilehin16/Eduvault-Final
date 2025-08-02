@@ -9,7 +9,6 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Cross-Origin-Resource-Policy: cross-origin");
 
-
 // Ensure the student is logged in
 if (!isset($_SESSION['student_id'])) {
     header('location:login.php');
@@ -20,18 +19,17 @@ $student_id = $_SESSION['student_id'];
 $student_email = $_SESSION['student_email'];
 $student_name = $_SESSION['student_name'];
 
-
 // Check if a product ID is provided
 if (!isset($_GET['id'])) {
     header('location:homepage.php');
     exit();
 }
+
 if(isset($_POST['logout'])){
     session_unset();
     session_destroy();
     header("Location: login.php");
     exit();
-    
 }
 
 $product_id = $_GET['id'];
@@ -70,8 +68,11 @@ $paystack_public_key = "pk_test_4729b3310d94eb3bfce9c491f7f685b9ebe12d22";
     <h2>Confirm Your Purchase</h2>
 
     <div class="product-details">
-        <?php $cover_image = !empty($book['cover_img_data']) ? $book['cover_img_data'] : $book['cover_img']; ?>
-<img src="<?php echo $cover_image; ?>" alt="Cover" style="max-width: 200px; height: auto;">
+        <?php 
+        // Fixed: Use $product instead of $book
+        $cover_image = !empty($product['cover_img_data']) ? $product['cover_img_data'] : $product['cover_img']; 
+        ?>
+        <img src="<?php echo $cover_image; ?>" alt="Cover" style="max-width: 200px; height: auto;">
         <h3><?php echo $product['title']; ?></h3>
         <p>Educator: <?php echo $product['educator_name']; ?></p>
         <p>Price: ₦<?php echo number_format($product['price'], 2); ?></p>
